@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0",
+  "version": "1.1.0",
   "inherited_from_genome": "1.1.0",
   "patterns": [
     {
@@ -21,7 +21,7 @@
     {
       "id": "gemini-auth-expiry",
       "description": "Gemini CLI OAuth token expires silently, causing empty output with exit 0",
-      "trigger": "gemini command returns empty output with no error",
+      "trigger": "gemini command returns empty output with no error message",
       "fix": "Run: gemini auth login to refresh OAuth token",
       "confidence": 0.8,
       "source": "local"
@@ -37,10 +37,28 @@
     {
       "id": "tmp-file-collision",
       "description": "Parallel agents writing to same /tmp filename cause corrupted output",
-      "trigger": "Multi-reviewer output is garbled or truncated",
+      "trigger": "Multi-reviewer output is garbled or truncated when run in parallel",
       "fix": "Use session-scoped temp names: /tmp/agent-${AGENT_NAME}-$(date +%s).txt",
       "confidence": 0.9,
-      "source": "council-review"
+      "source": "council-review",
+      "status": "IMPLEMENTED"
+    },
+    {
+      "id": "gemini-rate-limit",
+      "description": "Gemini free tier: 15 req/min Flash, 2 req/min Pro. Hits 429 on burst usage.",
+      "trigger": "gemini CLI returns 429 or 'Resource exhausted' error",
+      "fix": "Add sleep 5 between requests, or upgrade to paid tier with GEMINI_API_KEY",
+      "confidence": 0.85,
+      "source": "local"
+    },
+    {
+      "id": "codex-mcp-vs-cli-confusion",
+      "description": "Codex has two surfaces: MCP server (simple calls) and CLI (flags, output capture). Using MCP when you need CLI flags will silently ignore them.",
+      "trigger": "Codex behavior doesn't match expected flags (--full-auto, -s read-only, etc.)",
+      "fix": "Use codex-worker agent (CLI) when you need flags. Use MCP server for simple direct calls from Claude.",
+      "confidence": 0.95,
+      "source": "council-review",
+      "status": "DOCUMENTED"
     }
   ]
 }

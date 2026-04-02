@@ -65,9 +65,17 @@ Two integration surfaces:
 The CLI approach is used by agents. The MCP approach is available for direct tool calls without spawning a subagent.
 
 ```
-.mcp.json → codex mcp-server → Claude tool calls (direct)
-agents/*.md → Bash tool → gemini/codex CLI → /tmp/output
+.mcp.json → codex mcp-server → Claude tool calls (direct, simple tasks)
+agents/*.md → Bash tool → gemini/codex CLI → /tmp/output (complex tasks, flags)
 ```
+
+**When to use each Codex surface:**
+| Surface | Use when | How |
+|---|---|---|
+| MCP server (`.mcp.json`) | Quick Codex calls directly from Claude without spawning an agent | Claude calls the `codex` tool natively |
+| CLI via agent (`codex-worker`) | Need `--full-auto`, `-s read-only`, `-a auto-edit` flags; complex tasks; output capture | Agent runs `codex exec ...` via Bash |
+
+The MCP server and CLI share the same auth (ChatGPT OAuth). They are different interfaces to the same model, not competing approaches — use whichever fits the task.
 
 ### Session Log
 
