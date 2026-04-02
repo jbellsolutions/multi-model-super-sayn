@@ -15,10 +15,13 @@ Run `/project-main` at the start of each session for a repo health brief and rou
 
 | Model | Best for | Cost vs Claude Sonnet |
 |---|---|---|
-| **Gemini 2.5 Flash** | Large context (1M tokens), codebase analysis, batch docs | ~10x cheaper |
-| **Gemini 2.5 Pro** | Complex reasoning + web search grounding, deep research | ~6x cheaper |
+| **Gemini 2.5 Flash** | Large context (1M tokens), codebase analysis | ~10x cheaper input |
+| **Gemini 2.5 Flash** (batch) | Repetitive/batch docs via flash-triage agent | ~30x cheaper* |
+| **Gemini 2.5 Pro** | Complex reasoning + web search grounding, research | ~6x cheaper input |
 | **Codex CLI** | Focused implementation, test gen, targeted bug fixes | ~2x cheaper |
 | **Claude Sonnet** | Architecture, complex multi-step reasoning, coordination | baseline |
+
+*30x savings achieved by combining Flash's lower per-token cost with batch-optimized prompting that reduces total tokens. Flash input is $0.10/M vs Sonnet $3.00/M = 30x on input tokens. Output savings are smaller (~6x).
 
 ### Route to `gemini-analyst` when:
 - Analyzing 10+ files simultaneously or context > 100K tokens

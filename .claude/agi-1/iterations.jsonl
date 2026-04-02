@@ -1,1 +1,2 @@
 {"iteration":1,"gstack":80,"ai":85,"hl":40,"total":205,"changes":["cursor/rules","github/CI","slash commands"]}
+{"iteration":2,"gstack":80,"ai":88,"hl":43,"total":211,"changes":["session-scoped tmp files","error capture restored","collision hazard eliminated"]}

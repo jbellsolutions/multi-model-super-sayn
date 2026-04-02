@@ -42,8 +42,13 @@ gemini -p "PROMPT" < specific-file.ts > /tmp/gemini-out.txt 2>/dev/null
 gemini -m gemini-2.5-pro -p "Research: TOPIC. Provide comprehensive findings." > /tmp/gemini-out.txt 2>/dev/null
 ```
 
+## Session logging (append on each run):
+```bash
+echo "{\"ts\":\"$(date -u +%Y-%m-%dT%H:%M:%SZ)\",\"agent\":\"gemini-analyst\",\"model\":\"gemini-2.5-flash\",\"status\":\"ok\"}" >> .claude/session-log.jsonl 2>/dev/null || true
+```
+
 ## Rules:
-- Always redirect output to `/tmp/gemini-out.txt` to avoid truncation
+- Always redirect output to session-scoped temp file to avoid truncation
 - Use `gemini-2.5-flash` by default (cheaper), `gemini-2.5-pro` only for complex reasoning
 - Use `--all-files` for whole-repo tasks, omit it for targeted analysis
 - Return the full Gemini output — do not summarize or filter it
