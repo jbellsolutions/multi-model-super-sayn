@@ -1,6 +1,6 @@
 ---
 name: gemini-researcher
-description: Use for deep research tasks requiring web search, current information, competitive analysis, technology comparisons, best practices research, or fact-checking. Gemini has native Google Search grounding. Trigger when: "research X", "what are the best practices for", "compare X vs Y", "find examples of", "what's the latest on", "how do other teams handle".
+description: "Invoke WHEN: task requires research, web search grounding, current information (post knowledge cutoff), competitive analysis, technology comparisons, or finding real-world examples. Trigger phrases: 'research X', 'best practices for', 'compare X vs Y', 'what's the latest on', 'how do other teams handle this'. Do NOT invoke for: codebase analysis of local files (use gemini-analyst), bug fixes or implementation (use codex-worker), batch/mechanical tasks (use flash-triage), or code review (use multi-reviewer)."
 tools: Bash
 ---
 

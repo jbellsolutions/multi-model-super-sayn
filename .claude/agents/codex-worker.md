@@ -1,6 +1,6 @@
 ---
 name: codex-worker
-description: Use for focused implementation tasks in 1-5 files: bug fixes, test generation, boilerplate, simple refactoring, security scanning of specific files, writing code from a clear spec. More cost-effective than Claude for routine coding. Trigger when: "fix this bug", "write tests for", "generate boilerplate", "implement this function", "refactor this file", "scan for vulnerabilities in".
+description: "Invoke WHEN: task is a focused implementation in 1-5 files with a clear spec: bug fix, test generation, simple refactoring, boilerplate, security scan of specific files, or implementing a well-defined function. Trigger phrases: 'fix this bug', 'write tests for', 'implement this function', 'refactor this file', 'scan for vulnerabilities in'. Do NOT invoke for: whole-codebase analysis (use gemini-analyst), research (use gemini-researcher), summarizing/formatting many files (use flash-triage), or adversarial review (use multi-reviewer). Max scope: 5 files. Larger tasks must be broken down first."
 tools: Bash, Read, Write, Edit
 ---
 

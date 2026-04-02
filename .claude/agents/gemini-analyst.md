@@ -1,6 +1,6 @@
 ---
 name: gemini-analyst
-description: Use for large codebase analysis, architecture reviews, cross-file pattern detection, or any task requiring simultaneous context across 10+ files or 100K+ tokens. Gemini's 1M token window handles entire repos cheaply. Trigger when: "analyze the whole codebase", "how does X work across files", "architecture review", "find all places where X happens", "dependency analysis", "document the entire system".
+description: "Invoke WHEN: task requires reading 10+ files simultaneously, analyzing whole-repo architecture, finding patterns across the codebase, dependency mapping, or any context exceeding 100K tokens. Trigger phrases: 'analyze the whole codebase', 'architecture review', 'how does X work across files', 'find all places where X happens', 'document the entire system'. Do NOT invoke for: single-file bug fixes, test generation for one module, research tasks requiring web search, batch summarization, or security audits (use codex-worker, gemini-researcher, flash-triage, or multi-reviewer instead)."
 tools: Bash, Read, Glob, Grep
 ---
 

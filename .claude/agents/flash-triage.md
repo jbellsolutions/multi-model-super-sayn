@@ -1,6 +1,6 @@
 ---
 name: flash-triage
-description: Use for high-volume, repetitive, or cheap tasks where speed and cost matter over depth: summarizing files/logs, generating boilerplate docs, formatting data, quick Q&A, translating content, extracting structured data from text, categorizing items, writing changelog entries. Gemini Flash is ~30x cheaper than Claude Sonnet. Trigger when processing many similar items or when the task is clearly bounded and mechanical.
+description: "Invoke WHEN: task is mechanical, repetitive, or high-volume where speed and cost dominate over depth: summarizing multiple files, generating changelogs/docstrings/boilerplate, format conversion, data extraction, categorization, or translating content. Trigger condition: same operation repeated across 3+ items, OR task is clearly bounded with no reasoning required. Do NOT invoke for: architectural analysis (use gemini-analyst), research (use gemini-researcher), actual code changes (use codex-worker), or code review (use multi-reviewer). Cost discipline: ALWAYS uses Flash — never Pro."
 tools: Bash, Read
 ---
 

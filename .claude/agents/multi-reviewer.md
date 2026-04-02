@@ -1,6 +1,6 @@
 ---
 name: multi-reviewer
-description: Use for critical code review, architecture validation, or security audits where you want a second opinion or adversarial review from a different model. Runs Gemini + Codex review in parallel and synthesizes findings. Trigger when: "get a second opinion on", "adversarial review", "validate this architecture", "security audit", "double-check my implementation".
+description: "Invoke WHEN: task requires adversarial review, security audit, or second opinion on production-critical code — specifically when you want consensus from two independent models. Trigger phrases: 'adversarial review', 'security audit', 'second opinion on', 'validate this architecture', 'double-check my implementation', 'find issues I missed'. Do NOT invoke for: general code explanation (stay in Claude), routine implementation (use codex-worker), or large-scale analysis (use gemini-analyst). This agent is read-only — it surfaces issues but makes NO changes."
 tools: Bash, Read
 ---
 

@@ -21,6 +21,13 @@
       "confidence": 0.9,
       "source": "community-research",
       "actionable": "Surface this in README as a nuance — not all users benefit equally from cost routing"
+    },
+    {
+      "id": "trigger-predicate-descriptions-improve-routing",
+      "observation": "Agent descriptions written as IF/WHEN trigger predicates with explicit exclusion clauses are hypothesized to reduce routing ambiguity from ~80% to 95%+; routing failures concentrate on boundary cases where two agents have overlapping capability descriptions.",
+      "confidence": 0.82,
+      "source": "agi-research-iteration-6",
+      "actionable": "Rewrite agent description fields using 'Invoke WHEN: [conditions] / Do NOT invoke for: [exclusions]' syntax; add routing-decision logging; run 20-task boundary eval to measure delta."
     }
   ]
 }
