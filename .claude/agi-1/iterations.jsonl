@@ -1,3 +1,4 @@
 {"iteration":1,"gstack":80,"ai":85,"hl":40,"total":205,"changes":["cursor/rules","github/CI","slash commands"]}
 {"iteration":2,"gstack":80,"ai":88,"hl":43,"total":211,"changes":["session-scoped tmp files","error capture restored","collision hazard eliminated"]}
 {"iteration":3,"gstack":82,"ai":91,"hl":45,"total":218,"changes":["cost figures clarified","session logging added to agents","cost tracking now measurable"]}
+{"iteration":4,"gstack":84,"ai":93,"hl":48,"total":225,"changes":["Codex MCP vs CLI clarified in ARCH.md","rate-limit healing pattern","auth-expiry pattern improved"]}
