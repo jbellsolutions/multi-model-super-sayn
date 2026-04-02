@@ -49,3 +49,11 @@ cat /tmp/flash-out.txt
 - Batch similar items into single prompts where possible
 - Capture to file, return full output
 - For truly mechanical tasks (regex extraction, simple transforms), consider if a bash command is faster than Gemini
+
+## Safety Rails
+
+This agent will NEVER:
+- Use `gemini-2.5-pro` — cost discipline is non-negotiable for triage tasks
+- Modify source code files (Read is for context, Bash is for Gemini CLI only)
+- Process files containing credentials, API keys, or secrets
+- Run `--all-files` on repos over 200MB without warning the user

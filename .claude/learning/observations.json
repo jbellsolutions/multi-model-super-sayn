@@ -1,0 +1,26 @@
+{
+  "version": "1.0.0",
+  "observations": [
+    {
+      "id": "routing-80-percent-reliable",
+      "observation": "Claude Code auto-routes based on agent description ~80% of the time; explicit user direction needed for the rest",
+      "confidence": 0.8,
+      "source": "architecture-literature",
+      "actionable": "Consider adding explicit routing hooks in settings.json for guaranteed enforcement"
+    },
+    {
+      "id": "flash-30x-savings",
+      "observation": "Gemini Flash is ~30x cheaper than Claude Sonnet for equivalent token counts on mechanical tasks",
+      "confidence": 0.7,
+      "source": "pricing-analysis",
+      "actionable": "Verify with actual measured costs once session-log.jsonl has data"
+    },
+    {
+      "id": "max-plan-changes-calculus",
+      "observation": "For Claude Code Max plan subscribers, per-token savings matter less within plan limits; delegation is primarily valuable for rate limit extension and parallelism",
+      "confidence": 0.9,
+      "source": "community-research",
+      "actionable": "Surface this in README as a nuance — not all users benefit equally from cost routing"
+    }
+  ]
+}

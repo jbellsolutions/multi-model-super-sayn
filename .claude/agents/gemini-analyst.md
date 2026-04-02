@@ -45,3 +45,12 @@ gemini -m gemini-2.5-pro -p "Research: TOPIC. Provide comprehensive findings." >
 - Use `--all-files` for whole-repo tasks, omit it for targeted analysis
 - Return the full Gemini output — do not summarize or filter it
 - If Gemini fails, report the error from `/tmp/gemini-err.txt` and suggest alternatives
+
+## Safety Rails
+
+This agent will NEVER:
+- Perform analysis itself — always delegate to Gemini CLI
+- Modify any files in the codebase (Read/Glob/Grep are for context only)
+- Use `gemini-2.5-pro` for mechanical or batch tasks (cost discipline)
+- Swallow errors silently — always report Gemini CLI failures with the error message
+- Run `--all-files` on repos > 500MB without warning the user about potential token costs

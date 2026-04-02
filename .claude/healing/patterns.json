@@ -1,0 +1,46 @@
+{
+  "version": "1.0.0",
+  "inherited_from_genome": "1.1.0",
+  "patterns": [
+    {
+      "id": "bash-arithmetic-set-e",
+      "description": "((VAR++)) from zero exits with code 1 when set -e is active",
+      "trigger": "Script exits immediately after first increment",
+      "fix": "Use VAR=$((VAR+1)) instead of ((VAR++)) when set -e is active",
+      "confidence": 1.0,
+      "source": "genome"
+    },
+    {
+      "id": "ci-workflow-integration-tests",
+      "description": "Integration tests should self-skip when API key missing, not fail CI",
+      "trigger": "Integration test fails with missing API key",
+      "fix": "Add guard: [ -z \"$GEMINI_API_KEY\" ] && [ -z \"$OPENAI_API_KEY\" ] && echo 'SKIP' && exit 0",
+      "confidence": 1.0,
+      "source": "genome"
+    },
+    {
+      "id": "gemini-auth-expiry",
+      "description": "Gemini CLI OAuth token expires silently, causing empty output with exit 0",
+      "trigger": "gemini command returns empty output with no error",
+      "fix": "Run: gemini auth login to refresh OAuth token",
+      "confidence": 0.8,
+      "source": "local"
+    },
+    {
+      "id": "codex-timeout-large-task",
+      "description": "codex exec times out on tasks touching many files",
+      "trigger": "codex exec exits after 5min with no output",
+      "fix": "Break task into smaller subtasks targeting 1-3 files each",
+      "confidence": 0.9,
+      "source": "local"
+    },
+    {
+      "id": "tmp-file-collision",
+      "description": "Parallel agents writing to same /tmp filename cause corrupted output",
+      "trigger": "Multi-reviewer output is garbled or truncated",
+      "fix": "Use session-scoped temp names: /tmp/agent-${AGENT_NAME}-$(date +%s).txt",
+      "confidence": 0.9,
+      "source": "council-review"
+    }
+  ]
+}

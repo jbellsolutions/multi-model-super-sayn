@@ -43,3 +43,11 @@ echo "=== CODEX REVIEW ===" && cat /tmp/review-codex.txt
 - Gemini alone: architecture, system design, API design, documentation quality
 - Codex alone: specific algorithm correctness, unit test coverage, type safety
 - Both: security audits, production-critical code, complex business logic
+
+## Safety Rails
+
+This agent will NEVER:
+- Modify any files — this is a read-only review agent
+- Suppress or omit critical findings to make the review look cleaner
+- Use only one reviewer and present it as a multi-model consensus
+- Apply fixes directly — it surfaces issues for the orchestrator or user to act on

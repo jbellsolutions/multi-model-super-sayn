@@ -1,0 +1,19 @@
+{
+  "version": "1.0.0",
+  "last_run": null,
+  "session_count": 0,
+  "total_delegations": {
+    "gemini-analyst": 0,
+    "gemini-researcher": 0,
+    "codex-worker": 0,
+    "flash-triage": 0,
+    "multi-reviewer": 0
+  },
+  "estimated_cost_saved_usd": 0.0,
+  "healing_patterns_applied": [],
+  "open_todos": [
+    "Add session-scoped temp file naming",
+    "Add Gemini rate limit handling",
+    "Write smoke test script"
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "timestamp": "2026-04-02T01:17:23Z",
+  "gstack_score": 22,
+  "ai_readiness_score": 52,
+  "healing_learning_score": 5,
+  "combined_score": 79,
+  "iteration": 0,
+  "gaps": [
+    "README.md missing",
+    "ETHOS.md missing",
+    "ARCHITECTURE.md missing",
+    "CHANGELOG.md missing",
+    "VERSION missing",
+    "TODOS.md missing",
+    "LICENSE missing",
+    "AGENTS.md missing",
+    "llms.txt missing",
+    ".claude/settings.json missing",
+    ".claude/agents/ missing",
+    ".claude/healing/ missing",
+    ".claude/learning/ missing",
+    "WALKTHROUGH.md missing",
+    "No test framework"
+  ]
+}

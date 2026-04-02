@@ -1,0 +1,33 @@
+# Multi Model Super Sayn
+
+A Claude Code configuration layer that implements multi-model AI orchestration. Claude Code acts as the orchestrator, routing tasks to Gemini CLI and Codex CLI based on task type, context size, and cost efficiency.
+
+## Purpose
+Reduce AI development costs 60-80% on delegable tasks while maintaining Claude Sonnet quality for architecture and complex reasoning work.
+
+## Key files
+- CLAUDE.md — routing rules and decision matrix (loaded by Claude Code at session start)
+- .mcp.json — Codex CLI exposed as MCP server
+- .claude/agents/ — 5 subagent definitions:
+  - gemini-analyst.md: whole-codebase analysis via Gemini 1M token context
+  - gemini-researcher.md: deep research with Google Search grounding
+  - codex-worker.md: focused implementation in 1-5 files
+  - flash-triage.md: batch/repetitive tasks at minimum cost
+  - multi-reviewer.md: parallel adversarial review using both Gemini and Codex
+
+## How it works
+Claude reads YAML frontmatter `description` fields in agent files to auto-route tasks. Routing rules in CLAUDE.md provide a decision matrix with numeric thresholds (file count, token count, task type).
+
+## Cost model
+- Gemini 2.5 Flash: ~10x cheaper than Claude Sonnet per token
+- Gemini 2.5 Flash-Lite: ~30x cheaper
+- Codex CLI: ~2x cheaper
+- Architecture/reasoning stays in Claude Sonnet
+
+## Prerequisites
+- Gemini CLI (OAuth, free tier): npm i -g @google/gemini-cli
+- Codex CLI (ChatGPT OAuth): npm i -g @openai/codex
+- Claude Code: claude.ai/code
+
+## Language/format
+Configuration files only (Markdown + JSON). No runtime code required. Drop-in for any Claude Code project.

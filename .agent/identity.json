@@ -1,0 +1,37 @@
+{
+  "project_name": "Multi Model Super Sayn",
+  "description": "Claude Code multi-model orchestration framework. Routes AI tasks to Gemini and Codex based on cost and capability.",
+  "version": "1.0.0",
+  "language": "markdown+json",
+  "type": "configuration-framework",
+  "entry_points": [
+    "CLAUDE.md",
+    ".mcp.json",
+    ".claude/agents/"
+  ],
+  "key_components": [
+    ".claude/agents/gemini-analyst.md",
+    ".claude/agents/gemini-researcher.md",
+    ".claude/agents/codex-worker.md",
+    ".claude/agents/flash-triage.md",
+    ".claude/agents/multi-reviewer.md",
+    "CLAUDE.md",
+    ".mcp.json"
+  ],
+  "fragile_areas": [
+    "Gemini OAuth token expiry — silent empty output",
+    "Codex exec timeout on large tasks",
+    "/tmp file collisions in parallel agent runs",
+    "Routing reliability ~80% — not deterministic"
+  ],
+  "external_dependencies": [
+    {"name": "gemini-cli", "version": ">=0.35", "auth": "oauth-personal"},
+    {"name": "codex-cli", "version": ">=0.118", "auth": "chatgpt-oauth"},
+    {"name": "claude-code", "version": "latest", "auth": "claude-account"}
+  ],
+  "cost_model": {
+    "gemini_flash_vs_sonnet": "~10x cheaper",
+    "gemini_flash_lite_vs_sonnet": "~30x cheaper",
+    "codex_vs_sonnet": "~2x cheaper"
+  }
+}

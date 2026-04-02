@@ -2,6 +2,9 @@
 
 Claude Code as multi-model orchestrator — routes tasks to Gemini CLI and Codex CLI based on cost and capability.
 
+## Session Start
+Run `/project-main` at the start of each session for a repo health brief and routing context.
+
 ## Prerequisites
 - `gemini` CLI installed and authenticated (`gemini auth login`)
 - `codex` CLI installed and authenticated (`codex login`)

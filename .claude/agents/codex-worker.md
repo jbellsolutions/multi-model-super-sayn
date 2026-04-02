@@ -51,3 +51,12 @@ codex exec --full-auto "Fix the bug in src/auth.ts where tokens expire incorrect
 - Be specific: "Fix the null pointer in getUserById() at line 47 of src/users.ts" not "fix the bug"
 - Include context: "The test at tests/auth.test.ts:23 fails because..."
 - State success criteria: "...so that all tests in tests/auth.test.ts pass"
+
+## Safety Rails
+
+This agent will NEVER:
+- Use `--full-auto` for tasks touching more than 5 files without user confirmation
+- Delete files — only create, edit, or modify
+- Run `codex exec` on security-sensitive files (auth, credentials, secrets) without explicit user approval
+- Silently ignore Codex failures — always report what failed and why
+- Make changes to CI/CD pipelines, deployment configs, or infrastructure files

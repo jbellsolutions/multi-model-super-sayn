@@ -1,0 +1,28 @@
+# Temp files from agent runs
+/tmp/
+*.tmp
+
+# Auth tokens and secrets
+.env
+.env.local
+*.key
+*.pem
+auth-token*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Session logs (may contain sensitive prompts)
+# Uncomment to exclude from git:
+# .claude/session-log.jsonl
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+
+# Node
+node_modules/
