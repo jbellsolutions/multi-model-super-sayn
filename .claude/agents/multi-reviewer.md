@@ -16,20 +16,34 @@ You are a multi-model review coordinator. You run parallel reviews using Gemini 
 ## Parallel review execution:
 
 ```bash
+# Session-scoped temp files to prevent parallel collision
+SESSION_ID=$(date +%s)
+GEMINI_OUT="/tmp/review-gemini-${SESSION_ID}.txt"
+CODEX_OUT="/tmp/review-codex-${SESSION_ID}.txt"
+GEMINI_ERR="/tmp/review-gemini-${SESSION_ID}-err.txt"
+CODEX_ERR="/tmp/review-codex-${SESSION_ID}-err.txt"
+
 # Start both reviews simultaneously
-gemini -m gemini-2.5-pro --all-files -p "Perform a critical code review focusing on: FOCUS_AREA. Be adversarial — find problems, anti-patterns, security issues, edge cases. Format as: Critical Issues | Warnings | Suggestions" > /tmp/review-gemini.txt 2>/dev/null &
+gemini -m gemini-2.5-pro --all-files -p "Perform a critical code review focusing on: FOCUS_AREA. Be adversarial — find problems, anti-patterns, security issues, edge cases. Format as: Critical Issues | Warnings | Suggestions" > "$GEMINI_OUT" 2>"$GEMINI_ERR" &
 GEMINI_PID=$!
 
-codex exec -s read-only "Adversarial code review: FOCUS_AREA. Find bugs, security vulnerabilities, performance issues, and design problems. Be skeptical of all assumptions." > /tmp/review-codex.txt 2>/dev/null &
+codex exec -s read-only "Adversarial code review: FOCUS_AREA. Find bugs, security vulnerabilities, performance issues, and design problems. Be skeptical of all assumptions." > "$CODEX_OUT" 2>"$CODEX_ERR" &
 CODEX_PID=$!
 
-# Wait for both
-wait $GEMINI_PID
-wait $CODEX_PID
+# Wait for both, capture exit codes
+wait $GEMINI_PID; GEMINI_EXIT=$?
+wait $CODEX_PID; CODEX_EXIT=$?
 
-echo "=== GEMINI REVIEW ===" && cat /tmp/review-gemini.txt
+# Report results — always show errors if any
+echo "=== GEMINI REVIEW (exit: $GEMINI_EXIT) ==="
+if [[ -s "$GEMINI_OUT" ]]; then cat "$GEMINI_OUT"; else echo "No output. Error:"; cat "$GEMINI_ERR"; fi
+
 echo ""
-echo "=== CODEX REVIEW ===" && cat /tmp/review-codex.txt
+echo "=== CODEX REVIEW (exit: $CODEX_EXIT) ==="
+if [[ -s "$CODEX_OUT" ]]; then cat "$CODEX_OUT"; else echo "No output. Error:"; cat "$CODEX_ERR"; fi
+
+# Cleanup
+rm -f "$GEMINI_OUT" "$CODEX_OUT" "$GEMINI_ERR" "$CODEX_ERR"
 ```
 
 ## Synthesis rules:

@@ -16,17 +16,20 @@ You are a Gemini-powered analysis agent. You NEVER perform analysis yourself —
 
 **Whole-codebase analysis** (best for architecture, patterns, dependencies):
 ```bash
-gemini --all-files -p "YOUR ANALYSIS PROMPT" 2>/tmp/gemini-err.txt > /tmp/gemini-out.txt
-cat /tmp/gemini-out.txt
+TS=$(date +%s)
+gemini --all-files -p "YOUR ANALYSIS PROMPT" > "/tmp/gemini-analyst-${TS}.txt" 2>"/tmp/gemini-analyst-${TS}-err.txt"
+cat "/tmp/gemini-analyst-${TS}.txt"
+rm -f "/tmp/gemini-analyst-${TS}.txt" "/tmp/gemini-analyst-${TS}-err.txt"
 ```
 
 **Specific model selection** (flash is 6x cheaper, pro for complex reasoning):
 ```bash
+TS=$(date +%s)
 # Fast and cheap - use for most tasks
-gemini -m gemini-2.5-flash --all-files -p "PROMPT" > /tmp/gemini-out.txt 2>/dev/null
+gemini -m gemini-2.5-flash --all-files -p "PROMPT" > "/tmp/gemini-analyst-${TS}.txt" 2>"/tmp/gemini-analyst-${TS}-err.txt"
 
 # Pro reasoning - use for architecture decisions, complex analysis
-gemini -m gemini-2.5-pro --all-files -p "PROMPT" > /tmp/gemini-out.txt 2>/dev/null
+gemini -m gemini-2.5-pro --all-files -p "PROMPT" > "/tmp/gemini-analyst-${TS}.txt" 2>"/tmp/gemini-analyst-${TS}-err.txt"
 ```
 
 **File-targeted analysis** (when you know which files matter):
