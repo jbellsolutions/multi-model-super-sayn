@@ -1,0 +1,7 @@
+{
+  "baseline": {"gstack": 22, "ai_readiness": 52, "self_healing": 5, "total": 79},
+  "rescore":   {"gstack": 87, "ai_readiness": 95, "self_healing": 48, "total": 230},
+  "delta":     {"gstack": 65, "ai_readiness": 43, "self_healing": 43, "total": 151},
+  "regression": false,
+  "timestamp": "2026-04-02T01:57:28Z"
+}

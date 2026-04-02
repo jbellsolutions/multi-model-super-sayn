@@ -3,3 +3,4 @@
 {"iteration":3,"gstack":82,"ai":91,"hl":45,"total":218,"changes":["cost figures clarified","session logging added to agents","cost tracking now measurable"]}
 {"iteration":4,"gstack":84,"ai":93,"hl":48,"total":225,"changes":["Codex MCP vs CLI clarified in ARCH.md","rate-limit healing pattern","auth-expiry pattern improved"]}
 {"iteration":5,"gstack":87,"ai":95,"hl":48,"total":230,"changes":["SECURITY.md","cost guardrails","API key guidance","free tier limits documented"]}
+{"iteration":6,"type":"research","result":"COMPLETE","changes":["trigger-predicate descriptions on all 5 agents","routing research finding documented","new observation added"]}
