@@ -1,0 +1,58 @@
+name: Validate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check required files exist
+        run: |
+          for f in README.md CLAUDE.md ETHOS.md ARCHITECTURE.md AGENTS.md LICENSE CHANGELOG.md VERSION SKILL.md llms.txt; do
+            if [[ ! -f "$f" ]]; then
+              echo "MISSING: $f"
+              exit 1
+            fi
+            echo "OK: $f"
+          done
+
+      - name: Validate .mcp.json
+        run: python3 -m json.tool .mcp.json > /dev/null && echo "OK: .mcp.json"
+
+      - name: Validate .claude/settings.json
+        run: python3 -m json.tool .claude/settings.json > /dev/null && echo "OK: .claude/settings.json"
+
+      - name: Validate .claude/healing/patterns.json
+        run: python3 -m json.tool .claude/healing/patterns.json > /dev/null && echo "OK: healing patterns"
+
+      - name: Check agent files have YAML frontmatter
+        run: |
+          for f in .claude/agents/*.md; do
+            if ! head -3 "$f" | grep -q "^---"; then
+              echo "MISSING YAML frontmatter: $f"
+              exit 1
+            fi
+            echo "OK: $f"
+          done
+
+      - name: Check agent files have Safety Rails
+        run: |
+          for f in .claude/agents/*.md; do
+            if ! grep -q "Safety Rails" "$f"; then
+              echo "MISSING Safety Rails section: $f"
+              exit 1
+            fi
+            echo "OK: $f"
+          done
+
+      - name: Validate agent.py syntax
+        run: python3 -m py_compile .agent/agent.py && echo "OK: agent.py"
+
+      - name: Validate .agent/identity.json
+        run: python3 -m json.tool .agent/identity.json > /dev/null && echo "OK: identity.json"

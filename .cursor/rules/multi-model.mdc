@@ -1,0 +1,22 @@
+---
+description: Multi-model routing rules — when to use Gemini and Codex vs Claude
+alwaysApply: true
+---
+
+# Multi-Model Routing (Cursor)
+
+This project uses Claude Code as orchestrator with Gemini and Codex subagents.
+
+## Routing
+- Large analysis (10+ files) → delegate to Gemini CLI
+- Focused bug fix (1-5 files) → delegate to Codex CLI  
+- Batch/docs → Gemini Flash
+- Architecture/complex reasoning → Claude stays here
+
+## CLI quick refs
+```bash
+gemini -m gemini-2.5-flash --all-files -p "PROMPT"
+codex exec --full-auto "TASK"
+```
+
+See CLAUDE.md for full routing matrix.
