@@ -59,6 +59,60 @@
       "confidence": 0.95,
       "source": "council-review",
       "status": "DOCUMENTED"
+    },
+    {
+      "id": "missing-client-config",
+      "description": "Agent run fails because client config doesn't exist",
+      "trigger": "Client config not found",
+      "fix": "Run extraction agent first: ./lib/run-agent.sh extraction --client <id>",
+      "confidence": 1.0,
+      "source": "genome",
+      "source_repo": "ai-integraterz"
+    },
+    {
+      "id": "placeholder-in-delivery",
+      "description": "Template placeholder {{ not replaced in client deliverable",
+      "trigger": "{{ found in outputs/ directory",
+      "fix": "Check training-builder \u2014 client config field mapping to this placeholder is likely missing or empty. Run extraction agent again with clearer notes.",
+      "confidence": 0.9,
+      "source": "genome",
+      "source_repo": "ai-integraterz"
+    },
+    {
+      "id": "tmp-file-collision-parallel-agents",
+      "description": "Parallel agent bash processes writing to the same /tmp filename corrupt each other output",
+      "trigger": "Multi-model parallel review output is garbled or truncated",
+      "fix": "Use session-scoped temp file names: /tmp/agent-NAME-$(date +%s).txt",
+      "confidence": 0.9,
+      "source": "genome",
+      "source_repo": "multi-model-super-sayn"
+    },
+    {
+      "id": "agent-description-trigger-predicates",
+      "description": "Claude Code auto-routing reliability improves from ~80% to ~95% when agent descriptions use explicit IF/WHEN trigger predicates with Do NOT invoke exclusion clauses instead of capability summaries",
+      "trigger": "Agent routing misfires on boundary-case tasks",
+      "fix": "Rewrite description: Invoke WHEN: [conditions] / Do NOT invoke for: [adjacent domains]",
+      "confidence": 0.82,
+      "source": "genome",
+      "source_repo": "multi-model-super-sayn"
+    },
+    {
+      "id": "railway-node-version",
+      "description": "Railway Nixpacks defaults to Node 18 which fails for Next.js 16+",
+      "trigger": "Next.js build fails with 'Node.js version required >=20.9.0'",
+      "fix": "Add nixPkgs = [\"nodejs_22\", \"npm-10_x\"] to [build.nixpacksPlan.phases.setup] in railway.toml and engines.node >=20.9.0 in package.json",
+      "confidence": 1.0,
+      "source": "observed",
+      "source_repo": "multi-model-super-sayn"
+    },
+    {
+      "id": "railway-multiple-services",
+      "description": "Railway CLI fails with 'Multiple services found' when project has multiple services and none is linked",
+      "trigger": "railway up returns 'Multiple services found. Please specify a service via the --service flag'",
+      "fix": "Run `railway service <service-name>` to link, then use `railway up --service <id>` for deploys",
+      "confidence": 1.0,
+      "source": "observed",
+      "source_repo": "multi-model-super-sayn"
     }
   ]
 }

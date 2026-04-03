@@ -31,6 +31,23 @@ export async function POST(req: NextRequest) {
       };
 
       try {
+        // Guard: check API key is present before streaming
+        if (agent.provider === "gemini" && !process.env.GEMINI_API_KEY) {
+          send({ type: "routing", agent: selectedAgent, model: agent.model, provider: agent.provider });
+          send({ type: "error", message: `GEMINI_API_KEY is not set. Add it to Railway env vars or .env.local to use ${agent.displayName}.` });
+          return;
+        }
+        if (agent.provider === "openai" && !process.env.OPENAI_API_KEY) {
+          send({ type: "routing", agent: selectedAgent, model: agent.model, provider: agent.provider });
+          send({ type: "error", message: `OPENAI_API_KEY is not set. Add it to Railway env vars or .env.local to use ${agent.displayName}.` });
+          return;
+        }
+        if (agent.provider === "anthropic" && !process.env.ANTHROPIC_API_KEY) {
+          send({ type: "routing", agent: selectedAgent, model: agent.model, provider: agent.provider });
+          send({ type: "error", message: `ANTHROPIC_API_KEY is not set. Add it to Railway env vars or .env.local to use ${agent.displayName}.` });
+          return;
+        }
+
         // First event: which agent was selected
         send({ type: "routing", agent: selectedAgent, model: agent.model, provider: agent.provider });
 

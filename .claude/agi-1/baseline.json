@@ -1,25 +1,28 @@
 {
-  "timestamp": "2026-04-02T01:17:23Z",
-  "gstack_score": 22,
-  "ai_readiness_score": 52,
-  "healing_learning_score": 5,
-  "combined_score": 79,
+  "timestamp": "2026-04-03T00:00:00Z",
+  "gstack_score": 74,
+  "ai_readiness_score": 72,
+  "healing_learning_score": 28,
+  "combined_score": 174,
   "iteration": 0,
-  "gaps": [
-    "README.md missing",
-    "ETHOS.md missing",
-    "ARCHITECTURE.md missing",
-    "CHANGELOG.md missing",
-    "VERSION missing",
-    "TODOS.md missing",
-    "LICENSE missing",
-    "AGENTS.md missing",
-    "llms.txt missing",
-    ".claude/settings.json missing",
-    ".claude/agents/ missing",
-    ".claude/healing/ missing",
-    ".claude/learning/ missing",
-    "WALKTHROUGH.md missing",
-    "No test framework"
-  ]
+  "notes": {
+    "gstack_gaps": [
+      "No dashboard tests (smoke test missing)",
+      "ARCHITECTURE.md does not cover new dashboard/ directory",
+      "CHANGELOG.md thin (25 lines, missing dashboard entries)",
+      "TODOS.md not updated with dashboard gaps"
+    ],
+    "ai_readiness_gaps": [
+      "CLAUDE.md has no dashboard/Next.js routing instructions",
+      "agents/ lack dashboard-aware context",
+      ".claude/memory/ has only project.md (missing user/feedback/reference)",
+      "No .cursor/rules for dashboard TypeScript patterns"
+    ],
+    "healing_gaps": [
+      "7 patterns exist but none dashboard-specific",
+      "4 observations but none cover Railway/Node version issues",
+      "No dream-log.json",
+      "No checkpoint infrastructure"
+    ]
+  }
 }

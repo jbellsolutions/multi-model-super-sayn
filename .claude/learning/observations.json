@@ -20,7 +20,7 @@
       "observation": "For Claude Code Max plan subscribers, per-token savings matter less within plan limits; delegation is primarily valuable for rate limit extension and parallelism",
       "confidence": 0.9,
       "source": "community-research",
-      "actionable": "Surface this in README as a nuance — not all users benefit equally from cost routing"
+      "actionable": "Surface this in README as a nuance \u2014 not all users benefit equally from cost routing"
     },
     {
       "id": "trigger-predicate-descriptions-improve-routing",
@@ -28,6 +28,20 @@
       "confidence": 0.82,
       "source": "agi-research-iteration-6",
       "actionable": "Rewrite agent description fields using 'Invoke WHEN: [conditions] / Do NOT invoke for: [exclusions]' syntax; add routing-decision logging; run 20-task boundary eval to measure delta."
+    },
+    {
+      "id": "railway-node-18-next16",
+      "observation": "Railway Nixpacks defaults to Node 18 which hard-fails Next.js 16 build with 'Node.js version required >=20.9.0'",
+      "fix_applied": "Added nixPkgs=[nodejs_22] to railway.toml and engines.node>=20.9.0 to package.json",
+      "confidence": 1.0,
+      "session": "agi-1-2026-04-03"
+    },
+    {
+      "id": "gemini-key-silent-fail",
+      "observation": "Missing GEMINI_API_KEY causes 3 of 6 dashboard agents to fail silently \u2014 no user-visible error, just broken stream",
+      "recommendation": "Add error boundary in SSE handler that emits error event with provider-specific message when API key missing",
+      "confidence": 0.9,
+      "session": "agi-1-2026-04-03"
     }
   ]
 }

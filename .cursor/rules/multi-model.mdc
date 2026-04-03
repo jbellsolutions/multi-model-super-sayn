@@ -20,3 +20,14 @@ codex exec --full-auto "TASK"
 ```
 
 See CLAUDE.md for full routing matrix.
+
+## Dashboard (dashboard/)
+
+This is a Next.js 15 app with the following conventions:
+
+- Streaming: all AI responses use `AsyncGenerator<string>` via `lib/stream.ts`
+- SSE: `/api/chat/route.ts` emits `routing | token | done | error` events — do not change event names
+- Agent routing: keyword rules live in `lib/agents.ts` ROUTING_RULES array
+- Never add blocking awaits inside the SSE ReadableStream controller
+- Model IDs in `AGENTS` must match provider-accepted IDs exactly
+- Run `npm test` before any push — smoke tests must pass

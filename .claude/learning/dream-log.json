@@ -1,0 +1,21 @@
+[
+  {
+    "session": "agi-1-2026-04-03",
+    "hypotheses": [
+      {
+        "id": "H1",
+        "statement": "Missing API keys cause silent failures that erode user trust",
+        "confidence": 0.95,
+        "status": "implemented",
+        "fix": "Error boundary in SSE route with provider-specific missing-key messages"
+      },
+      {
+        "id": "H2",
+        "statement": "Keyword routing is too brittle for nuanced real-world requests",
+        "confidence": 0.8,
+        "status": "logged",
+        "recommendation": "Add semantic embedding fallback: embed user query and compare to agent description embeddings"
+      }
+    ]
+  }
+]

@@ -2,6 +2,15 @@
 
 Items identified for future improvement.
 
+## Dashboard (High Priority)
+
+- [ ] Add Gemini API key to Railway env vars — 3 of 6 dashboard agents currently fall back to orchestrator silently
+- [ ] Add chat persistence (localStorage or Turso) — history lost on page refresh
+- [ ] Add error boundary — failed API key gives unhandled stream error in UI
+- [ ] Wire dashboard agents to actually invoke .claude/agents/*.md via Claude Code subagent system (currently chat-only)
+- [ ] Build local-mode: proxy Codex through local `codex exec` CLI using OAuth subscription
+- [ ] Add file upload so agents can analyze local code in dashboard
+
 ## High Priority
 
 - [ ] Add actual cost measurement: track real token counts per agent call and log to session-log.jsonl

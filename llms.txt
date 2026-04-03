@@ -29,5 +29,9 @@ Claude reads YAML frontmatter `description` fields in agent files to auto-route 
 - Codex CLI (ChatGPT OAuth): npm i -g @openai/codex
 - Claude Code: claude.ai/code
 
+## Chat Dashboard
+A Next.js 15 web app in `dashboard/` provides a live chat interface to the agent team. Deployed on Railway at `super-sayn-dashboard-production.up.railway.app`. Routes messages to the optimal agent via keyword matching. Streams responses via SSE. Supports 6 agents: Orchestrator (Claude Haiku), Gemini Analyst, Gemini Researcher, Flash Triage, Codex Worker (GPT-4o), Multi Reviewer (Claude Sonnet).
+
 ## Language/format
-Configuration files only (Markdown + JSON). No runtime code required. Drop-in for any Claude Code project.
+Core: Configuration files only (Markdown + JSON). No runtime code required. Drop-in for any Claude Code project.
+Dashboard: TypeScript/Next.js 15, deployed on Railway, requires ANTHROPIC_API_KEY + OPENAI_API_KEY + GEMINI_API_KEY.

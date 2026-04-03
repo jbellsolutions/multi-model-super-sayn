@@ -76,6 +76,36 @@ codex exec --full-auto "precise task" > /tmp/out.txt            # implement (wri
 codex exec -s read-only "review task" > /tmp/out.txt            # analyze only
 ```
 
+## Dashboard Development (`dashboard/`)
+
+The `dashboard/` directory is a Next.js 15 app deployed on Railway.
+
+**Local dev:**
+```bash
+cd dashboard
+cp .env.example .env.local   # fill in API keys
+npm run dev                   # http://localhost:3000
+npm test                      # run smoke tests
+```
+
+**Key files:**
+- `lib/agents.ts` — agent registry and keyword routing rules
+- `lib/stream.ts` — unified streaming for Anthropic/Gemini/OpenAI
+- `app/api/chat/route.ts` — SSE endpoint (routing → tokens → done)
+- `app/page.tsx` — chat UI with agent sidebar
+
+**When working on the dashboard:**
+- NEVER add blocking calls inside the SSE stream — keep it async generator only
+- Keyword routing in `lib/agents.ts` is the fallback; prefer explicit agent selection
+- Test with `npm test` before pushing — smoke tests cover all 6 agents + routing
+- Railway auto-redeploys on push to main; watch `https://railway.com/project/59be8e3f`
+
+**Adding a new agent:**
+1. Add entry to `AGENTS` map in `lib/agents.ts`
+2. Add keyword triggers to `ROUTING_RULES`
+3. Add to sidebar in `app/page.tsx`
+4. Update `AGENTS.md` and this file
+
 ## Agents (place in `.claude/agents/` of any project to activate)
 - `gemini-analyst.md` — whole-codebase analysis
 - `gemini-researcher.md` — deep research with search grounding

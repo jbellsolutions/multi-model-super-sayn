@@ -95,6 +95,39 @@ Each agent invocation appends to `.claude/session-log.jsonl`:
 
 This enables cost tracking, routing audit, and performance measurement.
 
+### Chat Dashboard: `dashboard/`
+
+A Next.js 15 web interface for chatting with the agent team. Runs on Railway (hosted) or locally.
+
+```
+Browser
+  └─ dashboard/app/page.tsx         — SSE streaming chat UI
+       └─ POST /api/chat            — route.ts SSE endpoint
+            ├─ lib/agents.ts        — agent registry + keyword router
+            └─ lib/stream.ts        — unified AsyncGenerator (Anthropic/Gemini/OpenAI)
+```
+
+**Data flow:**
+1. User types message → POST `/api/chat` with history + optional agent lock
+2. `routeByKeyword()` selects agent (or user-locked agent is used)
+3. `streamChat()` opens SSE stream to the provider API
+4. Events emitted: `routing` → `token` × N → `done`
+5. UI renders tokens live with typing cursor; model badge shown on completion
+
+**Agent roster (dashboard):**
+| Display name | Model | Provider |
+|---|---|---|
+| Orchestrator | claude-haiku-4-5 | Anthropic |
+| Gemini Analyst | gemini-2.5-flash | Gemini |
+| Gemini Researcher | gemini-2.5-pro | Gemini |
+| Flash Triage | gemini-2.5-flash | Gemini |
+| Codex Worker | gpt-4o | OpenAI |
+| Multi Reviewer | claude-sonnet-4 | Anthropic |
+
+**Deployment:**
+- Hosted: Railway (`super-sayn-dashboard-production.up.railway.app`) — needs API keys as env vars
+- Local: `cd dashboard && npm run dev` — can proxy Codex via OAuth subscription
+
 ## Key Design Decisions
 
 **Why CLI over API?**
