@@ -17,6 +17,7 @@ interface TranscriptEntry {
   title: string;
   agent: AgentName;
   content: string;
+  timestamp: string;
   source: "live" | "demo";
   status: "running" | "completed";
 }
@@ -55,6 +56,13 @@ const STORAGE_KEY = "super-sayn-workspace-v1";
 
 function formatUsd(value: number) {
   return `$${value.toFixed(2)}`;
+}
+
+function formatTime(date = new Date()) {
+  return date.toLocaleTimeString([], {
+    hour: "numeric",
+    minute: "2-digit",
+  });
 }
 
 function modeLabel(mode: StrategyMode) {
@@ -309,6 +317,7 @@ export function OrchestratorWorkspace() {
                 title: event.title,
                 agent: event.agent,
                 content: "",
+                timestamp: formatTime(),
                 source: event.source,
                 status: "running",
               },
@@ -412,6 +421,8 @@ export function OrchestratorWorkspace() {
     (status) => status === "completed",
   ).length;
   const latestTrace = transcript[transcript.length - 1];
+  const progressPct =
+    totalSteps === 0 ? 0 : Math.round((completedSteps / totalSteps) * 100);
   const runStatusLabel = running
     ? latestTrace
       ? `Running ${latestTrace.title}`
@@ -435,244 +446,299 @@ export function OrchestratorWorkspace() {
   );
 
   return (
-    <main className="min-h-screen px-4 py-4 sm:px-5 lg:px-6">
-      <div className="mx-auto grid max-w-[1600px] gap-4 xl:grid-cols-[290px_minmax(0,1fr)_420px]">
-        <aside className="space-y-4 xl:sticky xl:top-4 xl:h-[calc(100vh-2rem)] xl:overflow-y-auto">
-          <section className="glass-panel relative overflow-hidden rounded-3xl p-5">
-            <div className="absolute right-[-2.6rem] top-[-1.8rem] opacity-85">
-              <Image
-                src="/super-sayn-burst.svg"
-                alt="Super Sayn burst"
-                width={160}
-                height={160}
-                className="h-32 w-32"
-                priority
-              />
-            </div>
-            <div className="relative z-10">
-              <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1 text-[11px] font-medium text-amber-50">
-                <span className="h-2 w-2 rounded-full bg-amber-300" />
-                Local Dashboard
-              </div>
-              <h1 className="mt-4 text-2xl font-extrabold tracking-tight text-white">
-                Super Sayn
-              </h1>
-              <p className="mt-2 text-sm leading-6 text-slate-100/88">
-                Plan the team first, then watch the execution live. This is the app
-                view, not the landing page.
+    <main className="min-h-screen px-4 py-5 sm:px-5 lg:px-6">
+      <div className="mx-auto max-w-[1640px]">
+        <section className="glass-panel energy-frame relative overflow-hidden rounded-[2rem] px-5 py-4 sm:px-6">
+          <div className="absolute right-5 top-3 hidden sm:block">
+            <Image
+              src="/super-sayn-burst.svg"
+              alt="Super Sayn burst"
+              width={120}
+              height={120}
+              className="h-24 w-24 opacity-85"
+              priority
+            />
+          </div>
+          <div className="flex flex-wrap items-end justify-between gap-4">
+            <div>
+              <p className="text-sm font-semibold uppercase tracking-[0.18em] text-orange-700">
+                Super Sayn dashboard
               </p>
-              <div className="mt-4 grid gap-3">
-                <div className="panel-soft rounded-2xl p-3">
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-200/80">
-                    Status
-                  </p>
-                  <p className="mt-2 text-base font-semibold text-white">
-                    {runStatusLabel}
-                  </p>
-                </div>
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="panel-soft rounded-2xl p-3">
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-200/80">
-                      API
-                    </p>
-                    <p className="mt-2 text-lg font-bold text-white">
-                      {providerSummary.apiReady}/3
-                    </p>
-                  </div>
-                  <div className="panel-soft rounded-2xl p-3">
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-200/80">
-                      CLI
-                    </p>
-                    <p className="mt-2 text-lg font-bold text-white">
-                      {providerSummary.cliReady}/3
-                    </p>
-                  </div>
-                </div>
+              <h1 className="font-heading glow-text mt-2 text-3xl font-extrabold tracking-tight text-slate-950 sm:text-4xl">
+                Mission control for your agent team
+              </h1>
+              <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-700 sm:text-base">
+                Write the job, inspect the recommended team, then run the
+                workflow with a live execution trace on the right.
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-3">
+              <div className="surface-card rounded-2xl px-4 py-3">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-500">
+                  Status
+                </p>
+                <p className="mt-1 text-sm font-bold text-slate-950">
+                  {runStatusLabel}
+                </p>
+              </div>
+              <div className="surface-card rounded-2xl px-4 py-3">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-500">
+                  API ready
+                </p>
+                <p className="mt-1 text-sm font-bold text-slate-950">
+                  {providerSummary.apiReady}/3 providers
+                </p>
+              </div>
+              <div className="surface-card rounded-2xl px-4 py-3">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-500">
+                  CLI ready
+                </p>
+                <p className="mt-1 text-sm font-bold text-slate-950">
+                  {providerSummary.cliReady}/3 providers
+                </p>
               </div>
             </div>
-          </section>
+          </div>
+        </section>
 
-          <section className="glass-panel rounded-3xl p-4">
-            <div className="flex items-center justify-between">
-              <h2 className="text-sm font-semibold text-white">Quick starts</h2>
-              <span className="text-xs text-slate-200/75">Load one</span>
-            </div>
-            <div className="mt-3 grid gap-2">
-              {STARTERS.map((starter) => (
-                <button
-                  key={starter.title}
-                  onClick={() => loadStarter(starter)}
-                  className="panel-soft rounded-2xl p-3 text-left transition hover:border-amber-300/35 hover:bg-amber-300/12"
-                >
-                  <p className="text-sm font-semibold text-white">{starter.title}</p>
-                  <p className="mt-1 text-xs leading-5 text-slate-100/78">
-                    {starter.prompt}
-                  </p>
-                </button>
-              ))}
-            </div>
-          </section>
-
-          <section className="glass-panel rounded-3xl p-4">
-            <div className="flex items-center justify-between">
-              <h2 className="text-sm font-semibold text-white">Provider readiness</h2>
-              <span className="text-xs text-slate-200/75">
-                {configuredProviders}/6 ready
-              </span>
-            </div>
-            <div className="mt-3 grid gap-2">
-              {providers.map((provider) => (
-                <div key={provider.id} className="panel-soft rounded-2xl p-3">
-                  <div className="flex items-center justify-between gap-2">
-                    <p className="text-sm font-semibold text-white">{provider.label}</p>
-                    <span
-                      className={`rounded-full px-2 py-1 text-[11px] font-medium ${
-                        provider.ready
-                          ? "bg-emerald-300/18 text-emerald-100"
-                          : "bg-slate-700 text-slate-100"
-                      }`}
-                    >
-                      {provider.ready ? "Ready" : "Setup"}
-                    </span>
+        <div className="mt-4 grid gap-4 xl:grid-cols-[280px_minmax(0,1fr)_410px]">
+          <aside className="space-y-4 xl:sticky xl:top-4 xl:h-[calc(100vh-2rem)] xl:overflow-y-auto">
+            <section className="glass-panel rounded-3xl p-4">
+              <div className="inline-flex items-center gap-2 rounded-full border border-orange-300/35 bg-orange-50 px-3 py-1 text-[11px] font-medium text-orange-700">
+                <span className="h-2 w-2 rounded-full bg-[var(--accent)]" />
+                Local-first
+              </div>
+              <div className="mt-4 grid gap-3">
+                {[
+                  [
+                    "1. Write the job",
+                    "Use a raw prompt like build software, audit a repo, or create a launch plan.",
+                  ],
+                  [
+                    "2. Review the team",
+                    "The planner picks the specialist mix, cost posture, and execution map.",
+                  ],
+                  [
+                    "3. Run the workflow",
+                    "The team trace on the right shows whether each step used live providers or demo mode.",
+                  ],
+                ].map(([title, text]) => (
+                  <div key={title} className="surface-card rounded-2xl p-3">
+                    <p className="text-sm font-bold text-slate-950">{title}</p>
+                    <p className="mt-1 text-sm leading-6 text-slate-600">{text}</p>
                   </div>
-                  <p className="mt-1 text-xs leading-5 text-slate-100/78">
-                    {provider.detail}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </section>
+                ))}
+              </div>
+            </section>
 
-          <section className="glass-panel rounded-3xl p-4">
-            <div className="flex items-center justify-between">
-              <h2 className="text-sm font-semibold text-white">Saved runs</h2>
-              <span className="text-xs text-slate-200/75">{savedRuns.length}</span>
-            </div>
-            <div className="mt-3 grid gap-2">
-              {savedRuns.length === 0 ? (
-                <div className="panel-soft rounded-2xl p-3 text-sm leading-6 text-slate-100/78">
-                  Completed runs will show up here so you can reuse them during demos.
-                </div>
-              ) : (
-                savedRuns.map((run) => (
+            <section className="glass-panel rounded-3xl p-4">
+              <div className="flex items-center justify-between">
+                <h2 className="text-sm font-semibold text-slate-950">
+                  Provider readiness
+                </h2>
+                <span className="text-xs text-slate-500">
+                  {configuredProviders}/6 ready
+                </span>
+              </div>
+              <div className="mt-3 grid gap-2">
+                {providers.map((provider) => (
+                  <div key={provider.id} className="surface-card rounded-2xl p-3">
+                    <div className="flex items-center justify-between gap-2">
+                      <div>
+                        <p className="text-sm font-semibold text-slate-950">
+                          {provider.label}
+                        </p>
+                        <p className="mt-1 text-xs leading-5 text-slate-600">
+                          {provider.detail}
+                        </p>
+                      </div>
+                      <span
+                        className={`rounded-full px-2 py-1 text-[11px] font-medium ${
+                          provider.ready
+                            ? "bg-emerald-100 text-emerald-700"
+                            : "bg-slate-200 text-slate-700"
+                        }`}
+                      >
+                        {provider.ready ? "Ready" : "Setup"}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="hud-panel mt-3 rounded-2xl p-3 text-sm leading-6 text-slate-700">
+                No keys required to explore the workflow. Demo mode still
+                generates the full planning and trace experience.
+              </div>
+            </section>
+
+            <section className="glass-panel rounded-3xl p-4">
+              <div className="flex items-center justify-between">
+                <h2 className="text-sm font-semibold text-slate-950">
+                  Prompt starters
+                </h2>
+                <span className="text-xs text-slate-500">Load one</span>
+              </div>
+              <div className="mt-3 grid gap-2">
+                {STARTERS.map((starter) => (
                   <button
-                    key={run.id}
-                    onClick={() => restoreRun(run)}
-                    className="panel-soft rounded-2xl p-3 text-left transition hover:border-cyan-300/35 hover:bg-cyan-300/12"
+                    key={starter.title}
+                    onClick={() => loadStarter(starter)}
+                    className="surface-card rounded-2xl p-3 text-left transition hover:border-orange-300 hover:bg-orange-50"
                   >
-                    <p className="line-clamp-2 text-sm font-semibold text-white">
-                      {run.prompt}
+                    <p className="text-sm font-semibold text-slate-950">
+                      {starter.title}
                     </p>
-                    <p className="mt-1 text-xs text-slate-100/76">
-                      {modeLabel(run.mode)} • {new Date(run.completedAt).toLocaleString()}
+                    <p className="mt-1 text-xs leading-5 text-slate-600">
+                      {starter.prompt}
                     </p>
                   </button>
-                ))
-              )}
-            </div>
-          </section>
-        </aside>
-
-        <section className="space-y-4">
-          <section className="glass-panel rounded-3xl p-5">
-            <div className="flex flex-wrap items-start justify-between gap-4">
-              <div>
-                <p className="text-sm font-semibold text-cyan-100">
-                  Team planner
-                </p>
-                <h2 className="mt-1 text-2xl font-extrabold tracking-tight text-white">
-                  Prompt, plan, then run
-                </h2>
-                <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-100/84">
-                  Generate Team Plan builds the structure in the center panel.
-                  Run Orchestrated Workflow streams activity in the execution monitor
-                  on the right.
-                </p>
+                ))}
               </div>
-              <div className="flex rounded-2xl border border-white/15 bg-slate-900/75 p-1">
-                {(["cost", "balanced", "performance"] as StrategyMode[]).map(
-                  (value) => (
+            </section>
+
+            <section className="glass-panel rounded-3xl p-4">
+              <div className="flex items-center justify-between">
+                <h2 className="text-sm font-semibold text-slate-950">
+                  Saved runs
+                </h2>
+                <span className="text-xs text-slate-500">{savedRuns.length}</span>
+              </div>
+              <div className="mt-3 grid gap-2">
+                {savedRuns.length === 0 ? (
+                  <div className="surface-card rounded-2xl p-3 text-sm leading-6 text-slate-600">
+                    Completed runs land here so you can reload them during demos
+                    or client calls.
+                  </div>
+                ) : (
+                  savedRuns.map((run) => (
                     <button
-                      key={value}
-                      onClick={() => setMode(value)}
-                      className={`rounded-xl px-4 py-2 text-sm font-semibold transition ${
-                        mode === value
-                          ? "bg-amber-300 text-slate-950"
-                          : "text-slate-100/86 hover:bg-white/10 hover:text-white"
-                      }`}
+                      key={run.id}
+                      onClick={() => restoreRun(run)}
+                      className="surface-card rounded-2xl p-3 text-left transition hover:border-teal-300 hover:bg-teal-50"
                     >
-                      {modeLabel(value)}
+                      <p className="line-clamp-2 text-sm font-semibold text-slate-950">
+                        {run.prompt}
+                      </p>
+                      <p className="mt-1 text-xs text-slate-500">
+                        {modeLabel(run.mode)} •{" "}
+                        {new Date(run.completedAt).toLocaleString()}
+                      </p>
                     </button>
-                  ),
+                  ))
                 )}
               </div>
-            </div>
+            </section>
+          </aside>
 
-            <textarea
-              value={prompt}
-              onChange={(event) => setPrompt(event.target.value)}
-              placeholder="Tell Super Sayn what you want to build, audit, research, or launch."
-              className="mt-4 min-h-40 w-full rounded-3xl border border-white/15 bg-slate-950/70 px-4 py-4 text-base leading-7 text-white outline-none transition placeholder:text-slate-300/55 focus:border-amber-300/65"
-            />
-
-            <div className="mt-4 flex flex-wrap items-center gap-3">
-              <button
-                onClick={createPlan}
-                disabled={planning || running}
-                className="rounded-2xl bg-[linear-gradient(135deg,#fde68a_0%,#f59e0b_45%,#ea580c_100%)] px-5 py-3 text-sm font-bold text-slate-950 transition hover:brightness-105 disabled:cursor-not-allowed disabled:opacity-60"
-              >
-                {planning ? "Generating plan..." : "Generate Team Plan"}
-              </button>
-              <button
-                onClick={runPlan}
-                disabled={!plan || planning || running}
-                className="rounded-2xl border border-cyan-300/40 bg-cyan-300/12 px-5 py-3 text-sm font-bold text-cyan-50 transition hover:bg-cyan-300/18 disabled:cursor-not-allowed disabled:opacity-50"
-              >
-                {running ? "Running workflow..." : "Run Orchestrated Workflow"}
-              </button>
-              <p className="text-sm text-slate-100/78">
-                {liveRecommended > 0
-                  ? `${liveRecommended} live API provider${liveRecommended === 1 ? "" : "s"} ready`
-                  : "No live API keys detected. The run will still work in demo mode."}
-              </p>
-            </div>
-
-            {errorMessage && (
-              <div className="mt-4 rounded-2xl border border-rose-300/30 bg-rose-400/12 px-4 py-3 text-sm text-rose-50">
-                {errorMessage}
+          <section className="space-y-4">
+            <section className="glass-panel energy-frame rounded-3xl p-5">
+              <div className="flex flex-wrap items-start justify-between gap-4">
+                <div>
+                  <p className="text-sm font-semibold text-teal-700">
+                    Mission control
+                  </p>
+                  <h2 className="font-heading mt-1 text-2xl font-extrabold tracking-tight text-slate-950">
+                    Prompt, approve the structure, then run it
+                  </h2>
+                  <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">
+                    This center panel is for the brief and the recommended
+                    structure. The live run always stays pinned in the right
+                    column.
+                  </p>
+                </div>
+                <div className="flex rounded-2xl border border-slate-900/10 bg-[#fff7f0] p-1">
+                  {(["cost", "balanced", "performance"] as StrategyMode[]).map(
+                    (value) => (
+                      <button
+                        key={value}
+                        onClick={() => setMode(value)}
+                        className={`rounded-xl px-4 py-2 text-sm font-semibold transition ${
+                          mode === value
+                            ? "bg-[var(--accent)] text-white"
+                            : "text-slate-700 hover:bg-white hover:text-slate-950"
+                        }`}
+                      >
+                        {modeLabel(value)}
+                      </button>
+                    ),
+                  )}
+                </div>
               </div>
-            )}
-          </section>
 
-          {!plan ? (
-            <section className="glass-panel rounded-3xl p-6">
-              <div className="grid gap-4 md:grid-cols-[1.2fr_0.8fr]">
-                <div className="panel-soft rounded-3xl p-5">
-                  <h3 className="text-lg font-bold text-white">How this works</h3>
+              <textarea
+                value={prompt}
+                onChange={(event) => setPrompt(event.target.value)}
+                placeholder="Tell Super Sayn what you want to build, audit, research, or launch."
+                className="mt-4 min-h-44 w-full rounded-[1.7rem] border border-slate-900/10 bg-white px-5 py-4 text-base leading-7 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-orange-400"
+              />
+
+              <div className="mt-4 flex flex-wrap items-center gap-3">
+                <button
+                  onClick={createPlan}
+                  disabled={planning || running}
+                  className="rounded-2xl bg-[var(--accent)] px-5 py-3 text-sm font-bold text-white transition hover:brightness-105 disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  {planning ? "Generating plan..." : "Generate Team Plan"}
+                </button>
+                <button
+                  onClick={runPlan}
+                  disabled={!plan || planning || running}
+                  className="rounded-2xl border border-teal-600/10 bg-teal-600 px-5 py-3 text-sm font-bold text-white transition hover:brightness-105 disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  {running ? "Running workflow..." : "Run Orchestrated Workflow"}
+                </button>
+                <p className="text-sm text-slate-600">
+                  {liveRecommended > 0
+                    ? `${liveRecommended} live API provider${liveRecommended === 1 ? "" : "s"} ready`
+                    : "No live API keys detected. The run will still work in demo mode."}
+                </p>
+              </div>
+
+              {errorMessage && (
+                <div className="mt-4 rounded-2xl border border-rose-300/60 bg-rose-50 px-4 py-3 text-sm text-rose-700">
+                  {errorMessage}
+                </div>
+              )}
+            </section>
+
+            {!plan ? (
+              <section className="grid gap-4 lg:grid-cols-[1.05fr_0.95fr]">
+                <div className="glass-panel rounded-3xl p-6">
+                  <p className="text-sm font-semibold uppercase tracking-[0.16em] text-orange-700">
+                    What this dashboard does
+                  </p>
                   <div className="mt-4 grid gap-3">
-                    <div className="rounded-2xl bg-white/5 p-4">
-                      <p className="text-sm font-semibold text-white">1. Generate the team plan</p>
-                      <p className="mt-1 text-sm leading-6 text-slate-100/78">
-                        Super Sayn classifies the prompt, picks the right specialist mix, and estimates the cost posture.
-                      </p>
-                    </div>
-                    <div className="rounded-2xl bg-white/5 p-4">
-                      <p className="text-sm font-semibold text-white">2. Review the structure</p>
-                      <p className="mt-1 text-sm leading-6 text-slate-100/78">
-                        The center panel will show costs, agent roster, deliverables, and the execution map.
-                      </p>
-                    </div>
-                    <div className="rounded-2xl bg-white/5 p-4">
-                      <p className="text-sm font-semibold text-white">3. Run the workflow</p>
-                      <p className="mt-1 text-sm leading-6 text-slate-100/78">
-                        The right panel is the live monitor. That is where you see what actually happens.
-                      </p>
-                    </div>
+                    {[
+                      [
+                        "Generate the team plan",
+                        "Super Sayn classifies the request, picks the specialist mix, and frames the cost posture before execution.",
+                      ],
+                      [
+                        "Inspect the structure",
+                        "You get a clear summary, the roster, deliverables, and the execution map in the center column.",
+                      ],
+                      [
+                        "Watch the run live",
+                        "The right column is the execution console, so you can see what actually happened without hunting for it.",
+                      ],
+                    ].map(([title, text]) => (
+                      <div key={title} className="surface-card rounded-3xl p-4">
+                        <p className="font-heading text-lg font-bold text-slate-950">
+                          {title}
+                        </p>
+                        <p className="mt-2 text-sm leading-6 text-slate-700">
+                          {text}
+                        </p>
+                      </div>
+                    ))}
                   </div>
                 </div>
-                <div className="panel-soft rounded-3xl p-5">
-                  <h3 className="text-lg font-bold text-white">Visual assets</h3>
-                  <div className="mt-4 overflow-hidden rounded-3xl border border-white/12 bg-slate-950/55 p-4">
+
+                <div className="glass-panel rounded-3xl p-6">
+                  <p className="text-sm font-semibold uppercase tracking-[0.16em] text-teal-700">
+                    Demo assets
+                  </p>
+                  <div className="mt-4 overflow-hidden rounded-3xl border border-slate-900/8 bg-white p-4">
                     <Image
                       src="/super-sayn-certification-card.svg"
                       alt="Super Sayn certification card"
@@ -682,296 +748,353 @@ export function OrchestratorWorkspace() {
                     />
                   </div>
                 </div>
-              </div>
-            </section>
-          ) : (
-            <>
-              <section className="grid gap-4 md:grid-cols-4">
-                <div className="glass-panel rounded-3xl p-4">
-                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-200/80">
-                    Planned Cost
-                  </p>
-                  <p className="mt-2 text-3xl font-extrabold text-white">
-                    {formatUsd(plan.estimates.plannedUsd)}
-                  </p>
-                </div>
-                <div className="glass-panel rounded-3xl p-4">
-                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-200/80">
-                    Baseline
-                  </p>
-                  <p className="mt-2 text-3xl font-extrabold text-white">
-                    {formatUsd(plan.estimates.baselineUsd)}
-                  </p>
-                </div>
-                <div className="glass-panel rounded-3xl p-4">
-                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-200/80">
-                    Savings
-                  </p>
-                  <p className="mt-2 text-3xl font-extrabold text-emerald-100">
-                    {plan.estimates.estimatedSavingsPct.toFixed(1)}%
-                  </p>
-                </div>
-                <div className="glass-panel rounded-3xl p-4">
-                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-200/80">
-                    Team Size
-                  </p>
-                  <p className="mt-2 text-3xl font-extrabold text-white">
-                    {plan.recommendedAgents.length}
-                  </p>
-                </div>
               </section>
-
-              <section className="glass-panel rounded-3xl p-5">
-                <h3 className="text-xl font-bold text-white">Plan summary</h3>
-                <p className="mt-3 text-sm leading-7 text-slate-50/90">
-                  {plan.summary}
-                </p>
-                <p className="mt-3 text-sm font-semibold text-amber-100">
-                  {plan.recommendation}
-                </p>
-                <div className="mt-4 grid gap-4 lg:grid-cols-[1.1fr_0.9fr]">
-                  <div className="panel-soft rounded-3xl p-4">
-                    <p className="text-sm font-semibold text-white">Why this plan</p>
-                    <div className="mt-3 grid gap-2">
-                      {plan.rationale.map((item) => (
-                        <div key={item} className="rounded-2xl bg-white/5 px-3 py-2 text-sm text-slate-50/84">
-                          {item}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                  <div className="panel-soft rounded-3xl p-4">
-                    <p className="text-sm font-semibold text-white">Expected deliverables</p>
-                    <div className="mt-3 flex flex-wrap gap-2">
-                      {plan.deliverables.map((item) => (
-                        <span
-                          key={item}
-                          className="rounded-full bg-cyan-300/12 px-3 py-2 text-sm text-cyan-50"
-                        >
-                          {item}
-                        </span>
-                      ))}
-                    </div>
-                    <p className="mt-4 text-xs leading-6 text-slate-100/76">
-                      {plan.estimates.note}
-                    </p>
-                  </div>
-                </div>
-              </section>
-
-              <section className="grid gap-4 2xl:grid-cols-[1fr_1fr]">
-                <div className="glass-panel rounded-3xl p-5">
-                  <div className="flex items-center justify-between gap-3">
-                    <h3 className="text-xl font-bold text-white">Agent roster</h3>
-                    <span className="text-sm text-slate-100/78">
-                      Click to enable or disable
-                    </span>
-                  </div>
-                  <div className="mt-4 grid gap-3">
-                    {plan.recommendedAgents.map((recommendation) => {
-                      const agent = AGENTS[recommendation.agent];
-                      const active = enabledAgents[recommendation.agent];
-
-                      return (
-                        <button
-                          key={recommendation.agent}
-                          onClick={() =>
-                            setEnabledAgents((current) => ({
-                              ...current,
-                              [recommendation.agent]: !current[recommendation.agent],
-                            }))
-                          }
-                          className={`rounded-3xl border p-4 text-left transition ${
-                            active
-                              ? "border-amber-300/40 bg-amber-300/12"
-                              : "border-white/12 bg-slate-950/35"
-                          }`}
-                        >
-                          <div className="flex items-start justify-between gap-3">
-                            <div>
-                              <div className="flex flex-wrap items-center gap-2">
-                                <span className={`rounded-full px-2 py-1 text-[11px] ${agent.badge}`}>
-                                  {agent.displayName}
-                                </span>
-                                <span className="text-xs text-slate-100/72">
-                                  {shortModel(agent.model)}
-                                </span>
-                              </div>
-                              <p className="mt-3 text-sm leading-6 text-white">
-                                {recommendation.reason}
-                              </p>
-                            </div>
-                            <span
-                              className={`rounded-full px-2 py-1 text-[11px] font-medium ${
-                                active
-                                  ? "bg-emerald-300/18 text-emerald-100"
-                                  : "bg-slate-700 text-slate-100"
-                              }`}
-                            >
-                              {active ? "Enabled" : "Disabled"}
-                            </span>
-                          </div>
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-
-                <div className="glass-panel rounded-3xl p-5">
-                  <div className="flex items-center justify-between gap-3">
-                    <h3 className="text-xl font-bold text-white">Execution map</h3>
-                    <span className="text-sm text-slate-100/78">
-                      {completedSteps}/{totalSteps} steps finished
-                    </span>
-                  </div>
-                  <div className="mt-4 grid gap-3">
-                    {plan.phases.map((phase, phaseIndex) => (
-                      <div key={phase.id} className="panel-soft rounded-3xl p-4">
-                        <div className="flex items-start justify-between gap-3">
-                          <div>
-                            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-200/78">
-                              Phase {phaseIndex + 1}
-                            </p>
-                            <p className="mt-1 text-lg font-bold text-white">
-                              {phase.title}
-                            </p>
-                            <p className="mt-1 text-sm leading-6 text-slate-50/84">
-                              {phase.goal}
-                            </p>
-                          </div>
-                          <div className="text-right">
-                            <span
-                              className={`rounded-full px-3 py-1 text-[11px] font-medium ${
-                                phase.parallel
-                                  ? "bg-cyan-300/15 text-cyan-100"
-                                  : "bg-white/10 text-slate-50"
-                              }`}
-                            >
-                              {phase.parallel ? "Parallel" : "Sequential"}
-                            </span>
-                            <p className="mt-2 text-xs text-slate-100/78">
-                              {phaseStatus[phase.id] ?? "idle"}
-                            </p>
-                          </div>
-                        </div>
-                        <div className="mt-3 grid gap-2">
-                          {phase.steps.map((step) => {
-                            const status = stepStatus[step.id] ?? "idle";
-                            return (
-                              <div key={step.id} className="rounded-2xl bg-white/5 px-3 py-3">
-                                <div className="flex items-center justify-between gap-3">
-                                  <div>
-                                    <p className="text-sm font-semibold text-white">
-                                      {step.title}
-                                    </p>
-                                    <p className="mt-1 text-xs text-slate-100/74">
-                                      {AGENTS[step.agent].displayName}
-                                    </p>
-                                  </div>
-                                  <span
-                                    className={`text-xs font-semibold ${
-                                      status === "completed"
-                                        ? "text-emerald-100"
-                                        : status === "running"
-                                          ? "text-amber-100"
-                                          : "text-slate-100/70"
-                                    }`}
-                                  >
-                                    {status}
-                                  </span>
-                                </div>
-                              </div>
-                            );
-                          })}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </section>
-            </>
-          )}
-        </section>
-
-        <aside className="xl:sticky xl:top-4 xl:h-[calc(100vh-2rem)]">
-          <section className="glass-panel flex h-full flex-col rounded-3xl p-4">
-            <div className="flex items-center justify-between gap-3 border-b border-white/12 pb-3">
-              <div>
-                <p className="text-sm font-semibold text-cyan-100">Execution monitor</p>
-                <h2 className="mt-1 text-2xl font-extrabold tracking-tight text-white">
-                  Team trace
-                </h2>
-              </div>
-              <span
-                className={`rounded-full px-3 py-1 text-xs font-medium ${
-                  running
-                    ? "bg-amber-300/18 text-amber-100"
-                    : finalReport
-                      ? "bg-emerald-300/18 text-emerald-100"
-                      : "bg-white/10 text-slate-50"
-                }`}
-              >
-                {running ? "Running" : finalReport ? "Completed" : "Idle"}
-              </span>
-            </div>
-
-            <div className="mt-4 rounded-3xl border border-white/12 bg-slate-950/45 p-4">
-              <div className="flex items-center justify-between gap-3">
-                <p className="text-sm font-semibold text-white">Current activity</p>
-                <p className="text-xs text-slate-100/74">
-                  {completedSteps}/{totalSteps || 0} steps
-                </p>
-              </div>
-              <p className="mt-2 text-sm leading-6 text-slate-50/84">
-                {latestTrace
-                  ? `${AGENTS[latestTrace.agent].displayName} is handling ${latestTrace.title}.`
-                  : "Generate a plan, then run it. Activity will stream here instead of pushing to the bottom of the page."}
-              </p>
-            </div>
-
-            <div className="mt-4 min-h-0 flex-1 overflow-y-auto rounded-3xl border border-white/12 bg-slate-950/45 p-4">
-              {transcript.length === 0 ? (
-                <div className="rounded-3xl bg-white/5 p-4 text-sm leading-6 text-slate-100/78">
-                  No run has started yet. The trace will show each specialist step, whether it is using a live provider or demo mode, and the exact output as it streams.
-                </div>
-              ) : (
-                <div className="space-y-3">
-                  {transcript.map((entry) => (
-                    <div key={entry.stepId} className="rounded-3xl border border-white/10 bg-white/5 p-4">
-                      <div className="flex flex-wrap items-center gap-2">
-                        <span className={`rounded-full px-2 py-1 text-[11px] ${AGENTS[entry.agent].badge}`}>
-                          {AGENTS[entry.agent].displayName}
-                        </span>
-                        <span className="text-xs font-medium text-slate-50/86">
-                          {entry.title}
-                        </span>
-                        <span className="text-xs text-slate-100/70">
-                          {entry.source === "live" ? "Live provider" : "Demo mode"}
-                        </span>
-                      </div>
-                      <p className="mt-3 whitespace-pre-wrap text-sm leading-7 text-slate-50/90">
-                        {entry.content}
-                        {entry.status === "running" && (
-                          <span className="ml-1 inline-block h-4 w-1 animate-pulse rounded-full bg-amber-200 align-middle" />
-                        )}
+            ) : (
+              <>
+                <section className="grid gap-4 xl:grid-cols-[1.12fr_0.88fr]">
+                  <div className="glass-panel rounded-3xl p-5">
+                    <div className="energy-divider pb-4">
+                      <p className="text-sm font-semibold text-teal-700">
+                        Recommended structure
+                      </p>
+                      <h3 className="font-heading mt-1 text-2xl font-extrabold tracking-tight text-slate-950">
+                        {plan.summary}
+                      </h3>
+                      <p className="mt-3 text-sm font-semibold leading-6 text-orange-700">
+                        {plan.recommendation}
                       </p>
                     </div>
-                  ))}
-                  <div ref={transcriptRef} />
-                </div>
-              )}
-            </div>
+                    <div className="mt-4 grid gap-4 lg:grid-cols-[1fr_0.92fr]">
+                      <div>
+                        <p className="text-sm font-semibold text-slate-950">
+                          Why this plan
+                        </p>
+                        <div className="mt-3 grid gap-2">
+                          {plan.rationale.map((item) => (
+                            <div
+                              key={item}
+                              className="surface-card rounded-2xl px-3 py-3 text-sm leading-6 text-slate-700"
+                            >
+                              {item}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                      <div>
+                        <p className="text-sm font-semibold text-slate-950">
+                          Expected deliverables
+                        </p>
+                        <div className="mt-3 flex flex-wrap gap-2">
+                          {plan.deliverables.map((item) => (
+                            <span
+                              key={item}
+                              className="rounded-full bg-teal-50 px-3 py-2 text-sm text-teal-700"
+                            >
+                              {item}
+                            </span>
+                          ))}
+                        </div>
+                        <div className="hud-panel mt-4 rounded-2xl p-4 text-sm leading-6 text-slate-700">
+                          {plan.estimates.note}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
 
-            <div className="mt-4 rounded-3xl border border-white/12 bg-amber-300/10 p-4">
-              <p className="text-sm font-semibold text-amber-100">Final handoff</p>
-              <p className="mt-2 whitespace-pre-wrap text-sm leading-6 text-slate-50/90">
-                {finalReport || "When the run finishes, the final report will stay visible here."}
-              </p>
-            </div>
+                  <div className="glass-panel rounded-3xl p-5">
+                    <p className="text-sm font-semibold text-orange-700">
+                      Plan scoreboard
+                    </p>
+                    <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                      <div className="surface-card rounded-3xl p-4">
+                        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">
+                          Planned Cost
+                        </p>
+                        <p className="mt-2 text-3xl font-extrabold text-slate-950">
+                          {formatUsd(plan.estimates.plannedUsd)}
+                        </p>
+                      </div>
+                      <div className="surface-card rounded-3xl p-4">
+                        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">
+                          Baseline Cost
+                        </p>
+                        <p className="mt-2 text-3xl font-extrabold text-slate-950">
+                          {formatUsd(plan.estimates.baselineUsd)}
+                        </p>
+                      </div>
+                      <div className="surface-card rounded-3xl p-4">
+                        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">
+                          Savings
+                        </p>
+                        <p className="mt-2 text-3xl font-extrabold text-emerald-700">
+                          {plan.estimates.estimatedSavingsPct.toFixed(1)}%
+                        </p>
+                      </div>
+                      <div className="surface-card rounded-3xl p-4">
+                        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">
+                          Team Size
+                        </p>
+                        <p className="mt-2 text-3xl font-extrabold text-slate-950">
+                          {plan.recommendedAgents.length}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="accent-panel mt-4 rounded-3xl p-4">
+                      <p className="text-sm font-semibold text-slate-950">
+                        Next move
+                      </p>
+                      <p className="mt-2 text-sm leading-6 text-slate-700">
+                        Run Orchestrated Workflow starts the execution console on
+                        the right. That column is the source of truth for what
+                        actually happened.
+                      </p>
+                    </div>
+                  </div>
+                </section>
+
+                <section className="grid gap-4 2xl:grid-cols-[1fr_1fr]">
+                  <div className="glass-panel rounded-3xl p-5">
+                    <div className="flex items-center justify-between gap-3">
+                      <h3 className="font-heading text-2xl font-extrabold tracking-tight text-slate-950">
+                        Agent roster
+                      </h3>
+                      <span className="text-sm text-slate-500">
+                        Click to enable or disable
+                      </span>
+                    </div>
+                    <div className="mt-4 grid gap-3">
+                      {plan.recommendedAgents.map((recommendation) => {
+                        const agent = AGENTS[recommendation.agent];
+                        const active = enabledAgents[recommendation.agent];
+
+                        return (
+                          <button
+                            key={recommendation.agent}
+                            onClick={() =>
+                              setEnabledAgents((current) => ({
+                                ...current,
+                                [recommendation.agent]:
+                                  !current[recommendation.agent],
+                              }))
+                            }
+                            className={`rounded-3xl border p-4 text-left transition ${
+                              active
+                                ? "border-orange-300 bg-orange-50"
+                                : "border-slate-900/8 bg-[#fffaf3]"
+                            }`}
+                          >
+                            <div className="flex items-start justify-between gap-3">
+                              <div>
+                                <div className="flex flex-wrap items-center gap-2">
+                                  <span
+                                    className={`rounded-full px-2 py-1 text-[11px] ${agent.badge}`}
+                                  >
+                                    {agent.displayName}
+                                  </span>
+                                  <span className="text-xs text-slate-500">
+                                    {shortModel(agent.model)}
+                                  </span>
+                                </div>
+                                <p className="mt-3 text-sm leading-6 text-slate-700">
+                                  {recommendation.reason}
+                                </p>
+                              </div>
+                              <span
+                                className={`rounded-full px-2 py-1 text-[11px] font-medium ${
+                                  active
+                                    ? "bg-emerald-100 text-emerald-700"
+                                    : "bg-slate-200 text-slate-700"
+                                }`}
+                              >
+                                {active ? "Enabled" : "Disabled"}
+                              </span>
+                            </div>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  <div className="glass-panel rounded-3xl p-5">
+                    <div className="flex items-center justify-between gap-3">
+                      <h3 className="font-heading text-2xl font-extrabold tracking-tight text-slate-950">
+                        Execution map
+                      </h3>
+                      <span className="text-sm text-slate-500">
+                        {completedSteps}/{totalSteps} steps finished
+                      </span>
+                    </div>
+                    <div className="mt-4 grid gap-3">
+                      {plan.phases.map((phase, phaseIndex) => (
+                        <div key={phase.id} className="surface-card rounded-3xl p-4">
+                          <div className="flex items-start justify-between gap-3">
+                            <div>
+                              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">
+                                Phase {phaseIndex + 1}
+                              </p>
+                              <p className="mt-1 text-lg font-bold text-slate-950">
+                                {phase.title}
+                              </p>
+                              <p className="mt-1 text-sm leading-6 text-slate-600">
+                                {phase.goal}
+                              </p>
+                            </div>
+                            <div className="text-right">
+                              <span
+                                className={`rounded-full px-3 py-1 text-[11px] font-medium ${
+                                  phase.parallel
+                                    ? "bg-teal-50 text-teal-700"
+                                    : "bg-slate-200 text-slate-700"
+                                }`}
+                              >
+                                {phase.parallel ? "Parallel" : "Sequential"}
+                              </span>
+                              <p className="mt-2 text-xs text-slate-500">
+                                {phaseStatus[phase.id] ?? "idle"}
+                              </p>
+                            </div>
+                          </div>
+                          <div className="mt-3 grid gap-2">
+                            {phase.steps.map((step) => {
+                              const status = stepStatus[step.id] ?? "idle";
+                              return (
+                                <div
+                                  key={step.id}
+                                  className="surface-card rounded-2xl px-3 py-3"
+                                >
+                                  <div className="flex items-center justify-between gap-3">
+                                    <div>
+                                      <p className="text-sm font-semibold text-slate-950">
+                                        {step.title}
+                                      </p>
+                                      <p className="mt-1 text-xs text-slate-500">
+                                        {AGENTS[step.agent].displayName}
+                                      </p>
+                                    </div>
+                                    <span
+                                      className={`text-xs font-semibold ${
+                                        status === "completed"
+                                          ? "text-emerald-700"
+                                          : status === "running"
+                                            ? "text-orange-700"
+                                            : "text-slate-500"
+                                      }`}
+                                    >
+                                      {status}
+                                    </span>
+                                  </div>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </section>
+              </>
+            )}
           </section>
-        </aside>
+
+          <aside className="xl:sticky xl:top-4 xl:h-[calc(100vh-2rem)]">
+            <section className="trace-shell energy-frame flex h-full flex-col rounded-3xl p-4">
+              <div className="energy-divider flex items-center justify-between gap-3 pb-4">
+                <div>
+                  <p className="text-sm font-semibold text-teal-700">
+                    Execution monitor
+                  </p>
+                  <h2 className="font-heading mt-1 text-2xl font-extrabold tracking-tight text-slate-950">
+                    Team trace
+                  </h2>
+                </div>
+                <span
+                  className={`rounded-full px-3 py-1 text-xs font-medium ${
+                    running
+                      ? "bg-orange-100 text-orange-700"
+                      : finalReport
+                        ? "bg-emerald-100 text-emerald-700"
+                        : "bg-slate-200 text-slate-700"
+                  }`}
+                >
+                  {running ? "Running" : finalReport ? "Completed" : "Idle"}
+                </span>
+              </div>
+
+              <div className="hud-panel mt-4 rounded-3xl p-4">
+                <div className="flex items-center justify-between gap-3">
+                  <p className="text-sm font-semibold text-slate-950">
+                    Current activity
+                  </p>
+                  <p className="text-xs text-slate-500">
+                    {completedSteps}/{totalSteps || 0} steps
+                  </p>
+                </div>
+                <div className="mt-3 h-2 rounded-full bg-white/80">
+                  <div
+                    className="h-full rounded-full bg-gradient-to-r from-orange-400 via-amber-400 to-teal-400 transition-all"
+                    style={{ width: `${progressPct}%` }}
+                  />
+                </div>
+                <p className="mt-2 text-sm leading-6 text-slate-600">
+                  {latestTrace
+                    ? `${AGENTS[latestTrace.agent].displayName} is handling ${latestTrace.title}.`
+                    : "Generate a plan, then run it. Activity will stream here instead of pushing to the bottom of the page."}
+                </p>
+              </div>
+
+              <div className="surface-card mt-4 min-h-0 flex-1 overflow-y-auto rounded-3xl p-4">
+                {transcript.length === 0 ? (
+                  <div className="chat-bubble rounded-3xl p-4 text-sm leading-6 text-slate-600">
+                    No run has started yet. The trace will show each specialist
+                    step, whether it is using a live provider or demo mode, and
+                    the exact output as it streams.
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    {transcript.map((entry) => (
+                      <div key={entry.stepId} className="chat-bubble rounded-3xl p-4">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <span
+                            className={`rounded-full px-2 py-1 text-[11px] ${AGENTS[entry.agent].badge}`}
+                          >
+                            {AGENTS[entry.agent].displayName}
+                          </span>
+                          <span className="text-xs font-medium text-slate-900">
+                            {entry.title}
+                          </span>
+                          <span className="text-xs text-slate-500">
+                            {entry.source === "live" ? "Live provider" : "Demo mode"}
+                          </span>
+                          <span className="ml-auto text-[11px] uppercase tracking-[0.14em] text-slate-400">
+                            {entry.timestamp}
+                          </span>
+                        </div>
+                        <p className="mt-3 whitespace-pre-wrap text-sm leading-7 text-slate-700">
+                          {entry.content}
+                          {entry.status === "running" && (
+                            <span className="ml-1 inline-block h-4 w-1 animate-pulse rounded-full bg-orange-400 align-middle" />
+                          )}
+                        </p>
+                      </div>
+                    ))}
+                    <div ref={transcriptRef} />
+                  </div>
+                )}
+              </div>
+
+              <div className="mt-4 rounded-3xl border border-orange-300/30 bg-orange-50 p-4">
+                <p className="text-sm font-semibold text-orange-700">
+                  Final handoff
+                </p>
+                <p className="mt-2 whitespace-pre-wrap text-sm leading-6 text-slate-700">
+                  {finalReport ||
+                    "When the run finishes, the final report will stay visible here."}
+                </p>
+              </div>
+            </section>
+          </aside>
+        </div>
       </div>
     </main>
   );
 }
-
