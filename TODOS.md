@@ -2,33 +2,48 @@
 
 Items identified for future improvement.
 
-## Dashboard (High Priority)
+## Phase 1: Product Reframe
 
-- [ ] Add Gemini API key to Railway env vars — 3 of 6 dashboard agents currently fall back to orchestrator silently
-- [ ] Add chat persistence (localStorage or Turso) — history lost on page refresh
-- [ ] Add error boundary — failed API key gives unhandled stream error in UI
-- [ ] Wire dashboard agents to actually invoke .claude/agents/*.md via Claude Code subagent system (currently chat-only)
-- [ ] Build local-mode: proxy Codex through local `codex exec` CLI using OAuth subscription
-- [ ] Add file upload so agents can analyze local code in dashboard
+- [ ] Redesign the dashboard from chat UI into orchestrator workspace with landing hero, setup state, planner state, and run state
+- [ ] Add original "power-up" visual branding for Super Sayn without using copyrighted anime assets
+- [ ] Rewrite the root README around the lead magnet offer and local-first orchestrator workflow
+- [ ] Replace generic dashboard README text with actual product setup and local development guidance
 
-## High Priority
+## Phase 2: Plan-First Orchestration
 
-- [ ] Add actual cost measurement: track real token counts per agent call and log to session-log.jsonl
-- [ ] Add Gemini rate limit handling: implement backoff when 429 is returned from Gemini CLI
-- [ ] Add session-scoped temp file naming: replace `/tmp/gemini-out.txt` with `/tmp/agent-${AGENT}-${SESSION_ID}.txt` to prevent parallel collisions
-- [ ] Write smoke test script: `./scripts/smoke-test.sh` that verifies all CLIs are authenticated
+- [ ] Add a structured execution-plan schema in `dashboard/lib/`
+- [ ] Build a planner endpoint that turns a prompt into a recommended agent-team plan
+- [ ] Add strategy modes: cost, balanced, performance
+- [ ] Let users approve the recommended plan or swap agents before execution
+- [ ] Replace keyword-only routing as the main UX with planner-driven orchestration
 
-## Medium Priority
+## Phase 3: Execution Visibility
 
-- [ ] Add `.cursor/rules/` for Cursor IDE integration
-- [ ] Add Claude Haiku routing tier for fast structured tasks within Claude ecosystem
-- [ ] Document Gemini CLI `--all-files` size limits and what happens on very large repos
-- [ ] Add example worked outputs for each agent
-- [ ] Create `CONTRIBUTING.md`
+- [ ] Show the planned agent graph visually in the dashboard
+- [ ] Add phase-by-phase run status and conversation trace
+- [ ] Add cost and savings estimates to each run
+- [ ] Persist session history locally so runs survive refreshes
+- [ ] Add artifact and deliverable summaries to completed runs
 
-## Low Priority
+## Phase 4: Real Local Tooling
 
-- [ ] Explore OpenRouter as a unified API gateway alternative to per-CLI auth
-- [ ] Add cost comparison table with real measured data (not estimates)
-- [ ] Build a simple dashboard for session-log.jsonl visualization
-- [ ] Test with Windows/WSL environment
+- [ ] Build local-mode connectors for `codex exec` and Gemini CLI
+- [ ] Add provider setup UX for local auth and API-key fallback
+- [ ] Add provider health checks and a local install doctor
+- [ ] Add file upload or repo-path context for more realistic build tasks
+- [ ] Add actual cost measurement and write usage data to `session-log.jsonl`
+
+## Phase 5: Lead Magnet Packaging
+
+- [ ] Add `docs/use-cases.md` with walkthrough-ready scenarios
+- [ ] Add landing page sections for certification CTA and use-case proof
+- [ ] Create original repo art and dashboard screenshots
+- [ ] Add a demo script for the installation/use walkthrough video
+- [ ] Add a simple run gallery or screenshot strip to the README
+
+## Operational Follow-Ups
+
+- [ ] Add Gemini rate limit handling with backoff
+- [ ] Keep session-scoped temp naming everywhere agents write to `/tmp`
+- [ ] Add Windows/WSL notes once local CLI mode stabilizes
+- [ ] Consider OpenRouter only after local-first workflow is solid

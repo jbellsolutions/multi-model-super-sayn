@@ -95,38 +95,46 @@ Each agent invocation appends to `.claude/session-log.jsonl`:
 
 This enables cost tracking, routing audit, and performance measurement.
 
-### Chat Dashboard: `dashboard/`
+### Orchestrator Dashboard: `dashboard/`
 
-A Next.js 15 web interface for chatting with the agent team. Runs on Railway (hosted) or locally.
+A Next.js 16 local dashboard that behaves like an orchestrator control room instead of a single chat surface. Runs locally or on Railway.
 
 ```
 Browser
-  └─ dashboard/app/page.tsx         — SSE streaming chat UI
-       └─ POST /api/chat            — route.ts SSE endpoint
-            ├─ lib/agents.ts        — agent registry + keyword router
-            └─ lib/stream.ts        — unified AsyncGenerator (Anthropic/Gemini/OpenAI)
+  └─ dashboard/app/page.tsx          — landing + workspace UI
+       ├─ GET /api/status            — provider readiness (API keys + local CLIs)
+       ├─ POST /api/plan             — structured team plan generation
+       ├─ POST /api/run              — SSE execution stream for plan phases
+       └─ POST /api/chat             — legacy single-agent fallback
+            ├─ lib/agents.ts         — agent registry + metadata + keyword fallback
+            ├─ lib/planner.ts        — execution-plan generator
+            ├─ lib/runtime.ts        — plan execution stream with live/demo fallback
+            ├─ lib/provider-status.ts — local/API provider inspection
+            └─ lib/stream.ts         — unified provider streaming
 ```
 
 **Data flow:**
-1. User types message → POST `/api/chat` with history + optional agent lock
-2. `routeByKeyword()` selects agent (or user-locked agent is used)
-3. `streamChat()` opens SSE stream to the provider API
-4. Events emitted: `routing` → `token` × N → `done`
-5. UI renders tokens live with typing cursor; model badge shown on completion
+1. User enters a prompt and picks `cost`, `balanced`, or `performance`
+2. `POST /api/plan` returns an `ExecutionPlan` with phases, recommended agents, deliverables, and estimated savings
+3. User enables or disables agents before execution
+4. `POST /api/run` streams `run_started → phase_started → step_started → step_token → step_completed → run_completed`
+5. If provider keys are absent, runtime falls back to deterministic demo output so the product still demos locally
+6. Completed runs are stored in browser state for walkthroughs and proof
 
 **Agent roster (dashboard):**
-| Display name | Model | Provider |
-|---|---|---|
-| Orchestrator | claude-haiku-4-5 | Anthropic |
-| Gemini Analyst | gemini-2.5-flash | Gemini |
-| Gemini Researcher | gemini-2.5-pro | Gemini |
-| Flash Triage | gemini-2.5-flash | Gemini |
-| Codex Worker | gpt-4o | OpenAI |
-| Multi Reviewer | claude-sonnet-4 | Anthropic |
+| Display name | Model | Provider | Primary role |
+|---|---|---|---|
+| Claude Orchestrator | claude-3-5-haiku-latest | Anthropic | planning + synthesis |
+| Gemini Analyst | gemini-2.5-flash | Gemini | architecture + repo analysis |
+| Gemini Researcher | gemini-2.5-pro | Gemini | research + positioning |
+| Flash Triage | gemini-2.5-flash-lite | Gemini | packaging + summaries |
+| Codex Worker | gpt-5.2-codex | OpenAI | implementation lanes |
+| Multi Reviewer | claude-sonnet-4-20250514 | Anthropic | launch and quality review |
 
 **Deployment:**
-- Hosted: Railway (`super-sayn-dashboard-production.up.railway.app`) — needs API keys as env vars
-- Local: `cd dashboard && npm run dev` — can proxy Codex via OAuth subscription
+- Hosted: Railway — set API keys for live provider execution
+- Local: `cd dashboard && npm install && npm run dev`
+- Demo-safe: without keys, `api/run` still produces an orchestration trace using demo fallbacks
 
 ## Key Design Decisions
 

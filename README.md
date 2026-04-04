@@ -1,120 +1,128 @@
 # Multi Model Super Sayn
 
-> Claude Code as a multi-model orchestrator — routes tasks to Gemini and Codex based on capability and cost, cutting AI spend 60–80% on delegable work.
+Multi Model Super Sayn is a local-first orchestrator starter for building visible AI agent teams. Instead of asking one model to do everything, the system plans a specialist workflow, shows which agents should run, estimates the cost posture, and lets you watch the handoffs.
 
-## What this is
+This repo is meant to work as both:
 
-A drop-in configuration layer that turns Claude Code into an intelligent dispatcher. Instead of running everything through Claude Sonnet, it routes tasks to the right model:
+- a free lead magnet people can clone and run
+- a starter framework for a Claude Code ecosystem workflow
 
-| Task type | Routes to | Cost vs Sonnet |
-|---|---|---|
-| Whole-codebase analysis, 10+ files | Gemini 2.5 Flash (1M token window) | ~10x cheaper |
-| Research, best practices, web facts | Gemini 2.5 Pro (search grounding) | ~6x cheaper |
-| Batch docs, changelogs, summaries | Gemini Flash-Lite | ~30x cheaper |
-| Focused bug fix, test gen (1-5 files) | Codex CLI | ~2x cheaper |
-| Critical review, security audit | Gemini + Codex in parallel | best coverage |
-| Architecture, complex multi-step | Claude Sonnet (stays here) | baseline |
+## What you can do with it
 
-## Prerequisites
+- turn one prompt into an agent-team plan
+- choose cost, balanced, or performance execution modes
+- show which Claude, Gemini, and Codex roles should handle each phase
+- visualize the run structure and final handoff
+- demo the product locally even before every provider is configured
 
-| Tool | Version | Install |
-|---|---|---|
-| Claude Code | latest | [claude.ai/code](https://claude.ai/code) |
-| Gemini CLI | ≥ 0.35 | `npm i -g @google/gemini-cli` |
-| Codex CLI | ≥ 0.118 | `npm i -g @openai/codex` |
-| Node.js | ≥ 20 | [nodejs.org](https://nodejs.org) |
+## Current product surfaces
 
-## Setup
+### 1. Dashboard
 
-### 1. Install and authenticate CLIs
+The local Next.js dashboard in [`dashboard/`](dashboard/) now supports:
+
+- plan-first orchestration
+- provider readiness checks
+- estimated cost and savings view
+- agent roster toggles
+- live execution trace
+- local browser persistence for saved runs
+- demo-mode execution when API keys are missing
+
+### 2. Claude Code framework
+
+The repo also ships the framework layer:
+
+- `.claude/agents/*.md` specialist agent templates
+- `CLAUDE.md` routing rules
+- `.mcp.json` for Codex MCP integration
+- walkthrough and architecture docs
+
+## Fast start
+
+### Dashboard
 
 ```bash
-# Gemini — uses Google OAuth (free tier available)
-gemini auth login
-
-# Verify Gemini works
-gemini -p "say hi" -m gemini-2.5-flash
-
-# Codex — uses OpenAI/ChatGPT account
-codex login
-
-# Verify Codex works
-codex exec -s read-only "print the current directory"
+cd dashboard
+cp .env.example .env.local
+npm install
+npm run dev
 ```
 
-### 2. Copy agent files to your project
+Open `http://localhost:3000`.
+
+If you do not set provider keys yet, the app still works in demo mode so users can experience the orchestrator flow.
+
+### Claude Code framework
 
 ```bash
-# In your project root:
 mkdir -p .claude/agents
 cp /path/to/multi-model-super-sayn/.claude/agents/*.md .claude/agents/
-cp /path/to/multi-model-super-sayn/CLAUDE.md .         # or append to existing
-cp /path/to/multi-model-super-sayn/.mcp.json .          # or merge into existing
+cp /path/to/multi-model-super-sayn/CLAUDE.md .
+cp /path/to/multi-model-super-sayn/.mcp.json .
 ```
 
-### 3. Open Claude Code and verify MCP
+Then open Claude Code in your target repo and start with:
 
-```
-/mcp
-```
-
-You should see `codex` listed as a connected server.
-
-### 4. Smoke test
-
-Ask Claude Code:
-```
-Analyze the architecture of this repo and suggest improvements.
+```text
+Analyze this codebase and recommend the best agent-team workflow for improving it.
 ```
 
-Claude should delegate to `gemini-analyst` for repos with many files, or handle it directly for small repos. Check the routing by watching which agent runs.
+## Dashboard experience
 
-## File structure
+The intended flow is:
 
-```
+1. User enters a prompt.
+2. Super Sayn classifies the job and generates an execution plan.
+3. The dashboard shows the recommended agents, phases, deliverables, and estimated savings.
+4. The user enables or disables agents.
+5. The run executes with visible per-agent trace output.
+6. The final report is saved locally as proof, demo material, or a reusable example.
+
+## Cost posture
+
+The dashboard shows estimated planned cost versus a premium single-model baseline. Right now that is a planning estimate, not measured billing. Real token logging remains on the roadmap.
+
+## Lead magnet positioning
+
+This repo is being shaped as the free front-end to a broader offer:
+
+- build your own AI agent team locally
+- learn orchestration by using a real starter system
+- funnel users toward Claude Code Ecosystem Certification from AI Integrators
+
+Supporting docs:
+
+- [docs/product-roadmap.md](docs/product-roadmap.md)
+- [docs/lead-magnet-plan.md](docs/lead-magnet-plan.md)
+- [docs/use-cases.md](docs/use-cases.md)
+
+## Repo structure
+
+```text
 .
-├── CLAUDE.md                    # Routing rules — loaded by Claude at session start
-├── .mcp.json                    # Codex as MCP server
-└── .claude/
-    └── agents/
-        ├── gemini-analyst.md    # Large context analysis (1M tokens)
-        ├── gemini-researcher.md # Deep research + search grounding
-        ├── codex-worker.md      # Focused implementation
-        ├── flash-triage.md      # Batch/repetitive tasks
-        └── multi-reviewer.md    # Parallel adversarial review
+├── dashboard/                  # Local dashboard and orchestration UI
+├── docs/                       # Product, lead magnet, and use-case planning
+├── .claude/agents/             # Claude Code specialist agents
+├── CLAUDE.md                   # Routing and orchestration rules
+├── ARCHITECTURE.md             # System overview
+└── WALKTHROUGH.md              # Setup instructions
 ```
 
-## How routing works
+## Roadmap
 
-Claude Code reads the `description` field in each agent's YAML frontmatter to decide when to auto-delegate. The descriptions contain explicit trigger phrases:
+Current implementation focus:
 
-```yaml
-description: Use for large codebase analysis... Trigger when: "analyze the whole codebase"...
-```
+- orchestrator-first landing page and workspace
+- plan generation and execution trace
+- provider readiness and local setup experience
 
-The routing rules in `CLAUDE.md` reinforce this with a decision matrix. Together they route ~80% of delegable tasks automatically.
+Next implementation focus:
 
-## Cost tracking
-
-After setup, each agent call logs to `.claude/session-log.jsonl`:
-
-```json
-{"ts":"2026-04-01T21:00:00Z","agent":"gemini-analyst","task":"architecture review","model":"gemini-2.5-flash","duration_ms":4200,"status":"ok"}
-```
-
-Review with: `cat .claude/session-log.jsonl | jq .`
-
-## Limitations
-
-- Routing is advisory (~80% reliable). For guaranteed enforcement, add hooks to `.claude/settings.json`.
-- Gemini CLI `--all-files` reads from the current directory — run Claude Code from the project root.
-- Codex `--full-auto` modifies files autonomously. Review diffs before committing.
-- `/tmp/` output files are ephemeral. Add `cat /tmp/out.txt` at the end of agent commands to capture output in context.
-- Rate limits on free Gemini tier: 15 requests/min on Flash, 2 requests/min on Pro.
-
-## Contributing
-
-See [CONTRIBUTING.md](CONTRIBUTING.md). Issues and PRs welcome.
+- real local CLI connectors for Codex and Gemini
+- measured cost logging
+- richer artifact export
+- screenshot, GIF, and walkthrough packaging for distribution
 
 ## License
 

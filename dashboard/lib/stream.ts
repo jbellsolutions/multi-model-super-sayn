@@ -1,8 +1,7 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import OpenAI from "openai";
-
-export type Provider = "anthropic" | "gemini" | "openai";
+import { Provider } from "@/lib/contracts";
 
 export interface Message {
   role: "user" | "assistant";

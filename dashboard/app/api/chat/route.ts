@@ -1,5 +1,6 @@
 import { NextRequest } from "next/server";
-import { AGENTS, routeByKeyword, AgentName } from "@/lib/agents";
+import { AGENTS, routeByKeyword } from "@/lib/agents";
+import { AgentName } from "@/lib/contracts";
 import { streamChat, Message } from "@/lib/stream";
 
 export const runtime = "nodejs";
