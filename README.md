@@ -43,15 +43,18 @@ The repo also ships the framework layer:
 ### Dashboard
 
 ```bash
-cd dashboard
-cp .env.example .env.local
-npm install
-npm run dev
+bash scripts/setup-dashboard.sh
+bash scripts/run-dashboard.sh
 ```
 
-Open `http://localhost:3000`.
+Open:
+
+- `http://localhost:3108` for the landing page
+- `http://localhost:3108/dashboard` for the working app dashboard
 
 If you do not set provider keys yet, the app still works in demo mode so users can experience the orchestrator flow.
+
+For an exact non-technical setup guide, see [docs/plain-english-walkthrough.md](docs/plain-english-walkthrough.md).
 
 ### Claude Code framework
 
@@ -72,12 +75,14 @@ Analyze this codebase and recommend the best agent-team workflow for improving i
 
 The intended flow is:
 
-1. User enters a prompt.
-2. Super Sayn classifies the job and generates an execution plan.
-3. The dashboard shows the recommended agents, phases, deliverables, and estimated savings.
-4. The user enables or disables agents.
-5. The run executes with visible per-agent trace output.
-6. The final report is saved locally as proof, demo material, or a reusable example.
+1. User lands on the sales page and enters email for free access.
+2. The app reveals the repo link and setup CTA.
+3. The working dashboard at `/dashboard` lets the user enter a prompt.
+4. Super Sayn classifies the job and generates an execution plan.
+5. The dashboard shows the recommended agents, phases, deliverables, and estimated savings.
+6. The user enables or disables agents.
+7. The run executes with visible per-agent trace output.
+8. The final report is saved locally as proof, demo material, or a reusable example.
 
 ## Cost posture
 
@@ -103,6 +108,7 @@ Supporting docs:
 .
 ├── dashboard/                  # Local dashboard and orchestration UI
 ├── docs/                       # Product, lead magnet, and use-case planning
+├── scripts/                    # Setup, run, and verification helpers
 ├── .claude/agents/             # Claude Code specialist agents
 ├── CLAUDE.md                   # Routing and orchestration rules
 ├── ARCHITECTURE.md             # System overview

@@ -2,9 +2,28 @@
 
 > **To install:** Open Claude Code in this folder and type `set this up for me` or `/walkthrough`
 
+If you want the local dashboard instead of just the framework, the fastest path is:
+
+```bash
+bash scripts/setup-dashboard.sh
+bash scripts/run-dashboard.sh
+```
+
+Then open:
+
+`http://localhost:3108/dashboard`
+
 ## What you're setting up
 
 Multi Model Super Sayn gives Claude Code a multi-model routing brain. Instead of every task running through Claude Sonnet, it routes to Gemini and Codex based on task type — cutting costs 60-80% on delegable work.
+
+It also ships a local dashboard that can:
+
+- generate an agent-team plan
+- show which agents will be used
+- estimate cost and savings
+- stream an execution trace
+- run in demo mode even without API keys
 
 ## Prerequisites
 

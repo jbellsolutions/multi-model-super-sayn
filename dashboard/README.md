@@ -2,7 +2,8 @@
 
 The dashboard turns the repo into a visible orchestrator experience:
 
-- prompt intake
+- `/` landing page with lead capture CTA
+- `/dashboard` app dashboard for planning and execution
 - team plan generation
 - cost and savings estimates
 - provider readiness panel
@@ -17,7 +18,10 @@ npm install
 npm run dev
 ```
 
-Open `http://localhost:3000`.
+Open:
+
+- `http://localhost:3000/` for the landing page
+- `http://localhost:3000/dashboard` for the actual app dashboard
 
 ## Environment variables
 
@@ -25,6 +29,10 @@ Open `http://localhost:3000`.
 ANTHROPIC_API_KEY=
 GEMINI_API_KEY=
 OPENAI_API_KEY=
+NEXT_PUBLIC_REPO_URL=
+NEXT_PUBLIC_DASHBOARD_URL=/dashboard
+NEXT_PUBLIC_CALENDAR_URL=
+LEAD_WEBHOOK_URL=
 ```
 
 If keys are missing, the dashboard still works in demo mode so users can see the planning and orchestration flow.
@@ -40,6 +48,7 @@ npm run build
 
 ## API routes
 
+- `POST /api/lead` captures email on the landing page and returns the repo/dashboard links
 - `POST /api/plan` generates a structured agent-team plan
 - `POST /api/run` streams a phase-by-phase execution trace
 - `GET /api/status` reports API-key and local CLI readiness

@@ -1,11 +1,11 @@
 @import "tailwindcss";
 
 :root {
-  --page-bg: #080b15;
-  --foreground: #f5f7ff;
-  --muted: #98a2b3;
-  --panel: rgba(9, 14, 28, 0.74);
-  --panel-border: rgba(255, 255, 255, 0.1);
+  --page-bg: #0f172a;
+  --foreground: #f8fafc;
+  --muted: #dbe4f0;
+  --panel: rgba(30, 41, 59, 0.92);
+  --panel-border: rgba(226, 232, 240, 0.18);
 }
 
 @theme inline {
@@ -13,14 +13,13 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-body);
   --font-mono: var(--font-mono);
-  --font-display: var(--font-display);
 }
 
 body {
   background:
-    radial-gradient(circle at top, rgba(255, 177, 72, 0.16), transparent 32%),
-    radial-gradient(circle at 18% 18%, rgba(60, 197, 255, 0.14), transparent 28%),
-    linear-gradient(180deg, #0a0f1d 0%, #05070d 52%, #05060c 100%);
+    radial-gradient(circle at top, rgba(245, 158, 11, 0.18), transparent 32%),
+    radial-gradient(circle at 18% 18%, rgba(56, 189, 248, 0.16), transparent 28%),
+    linear-gradient(180deg, #172033 0%, #101827 50%, #0b1320 100%);
   color: var(--foreground);
   font-family: var(--font-body), sans-serif;
   min-height: 100vh;
@@ -44,20 +43,16 @@ textarea {
   font: inherit;
 }
 
-.font-display {
-  font-family: var(--font-display), sans-serif;
-}
-
 .font-body {
   font-family: var(--font-body), sans-serif;
 }
 
 .glass-panel {
-  background: linear-gradient(180deg, rgba(12, 18, 34, 0.82), rgba(8, 11, 21, 0.78));
+  background: linear-gradient(180deg, rgba(43, 58, 80, 0.96), rgba(30, 41, 59, 0.94));
   border: 1px solid var(--panel-border);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.06),
-    0 24px 90px rgba(0, 0, 0, 0.35);
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 18px 60px rgba(2, 6, 23, 0.32);
   backdrop-filter: blur(22px);
 }
 
@@ -70,4 +65,9 @@ textarea {
     linear-gradient(120deg, transparent 0%, rgba(255, 255, 255, 0.06) 48%, transparent 60%);
   mix-blend-mode: screen;
   pointer-events: none;
+}
+
+.panel-soft {
+  background: rgba(15, 23, 42, 0.66);
+  border: 1px solid rgba(226, 232, 240, 0.14);
 }

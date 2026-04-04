@@ -1,0 +1,36 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1600" height="900" rx="40" fill="#060912"/>
+  <rect x="48" y="48" width="1504" height="804" rx="32" fill="url(#paint0_linear)" fill-opacity="0.9" stroke="rgba(255,255,255,0.08)"/>
+  <circle cx="1258" cy="218" r="190" fill="url(#paint1_radial)" fill-opacity="0.9"/>
+  <circle cx="1308" cy="220" r="120" fill="url(#paint2_radial)" fill-opacity="0.9"/>
+  <path d="M1280 69L1317 176L1411 110L1376 213L1492 211L1402 285L1506 347L1388 371L1458 479L1346 436L1338 573L1260 475L1188 585L1176 436L1065 479L1134 371L1015 347L1120 285L1028 211L1144 213L1110 110L1203 176L1240 69H1280Z" fill="url(#paint3_linear)"/>
+  <p/>
+  <text x="116" y="178" fill="#93E5FF" font-family="IBM Plex Mono, monospace" font-size="24" letter-spacing="0.18em">FREE LEAD MAGNET</text>
+  <text x="116" y="286" fill="#F8FBFF" font-family="Orbitron, sans-serif" font-size="86" font-weight="700">BUILD YOUR OWN</text>
+  <text x="116" y="382" fill="#FFD36B" font-family="Orbitron, sans-serif" font-size="86" font-weight="700">AI AGENT TEAM</text>
+  <text x="116" y="466" fill="#F8FBFF" font-family="Space Grotesk, sans-serif" font-size="34">Super Sayn is a local-first orchestrator starter that plans, routes,</text>
+  <text x="116" y="514" fill="#F8FBFF" font-family="Space Grotesk, sans-serif" font-size="34">and visualizes the best Claude, Gemini, and Codex workflow for the job.</text>
+  <rect x="116" y="594" width="454" height="84" rx="24" fill="#FFD36B"/>
+  <text x="156" y="648" fill="#071019" font-family="Orbitron, sans-serif" font-size="34" font-weight="700">CLAUDE CODE ECOSYSTEM</text>
+  <rect x="116" y="712" width="366" height="64" rx="20" fill="#0C1424" stroke="#25314B"/>
+  <text x="148" y="753" fill="#F8FBFF" font-family="IBM Plex Mono, monospace" font-size="24">Certification path by AI Integrators</text>
+  <defs>
+    <linearGradient id="paint0_linear" x1="800" y1="48" x2="800" y2="852" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0E1426"/>
+      <stop offset="1" stop-color="#070A13"/>
+    </linearGradient>
+    <radialGradient id="paint1_radial" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1258 218) rotate(90) scale(190)">
+      <stop stop-color="#FFB94A"/>
+      <stop offset="1" stop-color="#FF7A1A" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="paint2_radial" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1308 220) rotate(90) scale(120)">
+      <stop stop-color="#FFF8D8"/>
+      <stop offset="1" stop-color="#FFD36B" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="paint3_linear" x1="1260.5" y1="69" x2="1260.5" y2="585" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFF7CF"/>
+      <stop offset="0.47" stop-color="#FFD767"/>
+      <stop offset="1" stop-color="#FF8A26"/>
+    </linearGradient>
+  </defs>
+</svg>

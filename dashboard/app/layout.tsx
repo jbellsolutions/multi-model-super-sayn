@@ -1,15 +1,11 @@
 import type { Metadata } from "next";
-import { IBM_Plex_Mono, Orbitron, Space_Grotesk } from "next/font/google";
+import { IBM_Plex_Mono, Manrope } from "next/font/google";
 import "./globals.css";
 
-const display = Orbitron({
-  variable: "--font-display",
-  subsets: ["latin"],
-});
-
-const body = Space_Grotesk({
+const body = Manrope({
   variable: "--font-body",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
 });
 
 const mono = IBM_Plex_Mono({
@@ -32,7 +28,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${display.variable} ${body.variable} ${mono.variable} h-full antialiased`}
+      className={`${body.variable} ${mono.variable} h-full antialiased`}
     >
       <body className="min-h-full bg-[var(--page-bg)] font-body text-[var(--foreground)]">
         {children}
